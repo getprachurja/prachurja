@@ -1,4 +1,3 @@
-import { env } from "cloudflare:workers";
 import { z } from "zod";
 
 const schema = z.object({
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const runtime = env as unknown as Record<string, string | undefined>;
+  const runtime = process.env as Record<string, string | undefined>;
   const apiKey = runtime.GROQ_API_KEY;
   const latestQuestion = [...parsed.messages].reverse().find((message) => message.role === "user")?.content ?? "";
   if (!apiKey) return Response.json({ answer: fallbackAnswer(latestQuestion), mode: "guided" });
