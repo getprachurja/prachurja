@@ -1,5 +1,3 @@
-import { env } from "cloudflare:workers";
-
 type RuntimeEnvironment = Record<string, string | undefined>;
 
 type SelectOptions = {
@@ -10,7 +8,7 @@ type SelectOptions = {
 };
 
 function runtime() {
-  return env as unknown as RuntimeEnvironment;
+  return process.env as RuntimeEnvironment;
 }
 
 function configuration() {

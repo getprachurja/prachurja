@@ -1,4 +1,3 @@
-import { env } from "cloudflare:workers";
 import { selectRows } from "@/lib/supabase-data";
 
 export type PortalRole = "admin" | "client" | "partner" | "field";
@@ -11,7 +10,7 @@ const routeByRole: Record<PortalRole, string> = {
 };
 
 function configuredEmails(key: string): string[] {
-  const runtime = env as unknown as Record<string, string | undefined>;
+  const runtime = process.env as Record<string, string | undefined>;
   return (runtime[key] ?? "")
     .split(",")
     .map((email) => email.trim().toLowerCase())
