@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1784437609642,
+      "tag": "0000_powerful_the_hand",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1784443650442,
+      "tag": "0001_same_longshot",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1784446967360,
+      "tag": "0002_black_tenebrous",
+      "breakpoints": true
+    }
+  ]
+}
