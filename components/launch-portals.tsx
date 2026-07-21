@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { ArrowRight, BarChart3, Check, ClipboardCheck, FileText, PackageCheck, RefreshCw, Trees, Users } from "lucide-react";
 import AdminControlCentre from "@/components/admin-control-centre";
 
@@ -12,7 +13,7 @@ type ContactMessage = { id:string; reference:string; name:string; organisation:s
 
 function PortalShell({viewer,title,eyebrow,children}:{viewer:Viewer;title:string;eyebrow:string;children:React.ReactNode}){
   const ownRoute=viewer.role==="partner"?"/partner-portal":`/${viewer.role}`;
-  return <div className={`dashboard dashboard-${viewer.role}`}><aside className="dashboard-sidebar"><a className="brand" href="/"><span className="brand-mark portal-brand-mark"><img src="/prachurja-logo-final.jpeg" alt=""/></span><span><b>PRACHURJA</b><small>{viewer.role.toUpperCase()}</small></span></a><nav><a className="active" href={ownRoute}><BarChart3/>Workspace</a>{viewer.role==="admin"?<><a href="/client"><ClipboardCheck/>Client view</a><a href="/partner-portal"><PackageCheck/>Partner view</a><a href="/field"><Trees/>Field view</a><a href="/partner"><Users/>Partner intake</a></>:<a href="/assessment"><ClipboardCheck/>Assessments</a>}</nav><div className="portal-user"><b>{viewer.name}</b><span>{viewer.email}</span><a href="/signout-with-chatgpt?return_to=/">Sign out</a></div><a href="/">← Public site</a></aside><div className="dashboard-main"><header className="dashboard-header"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1></div><span className="live-badge"><i/> Live workspace</span></header>{viewer.role==="admin"&&title==="Restoration operations overview"&&<AdminControlCentre/>}{children}</div></div>;
+  return <div className={`dashboard dashboard-${viewer.role}`}><aside className="dashboard-sidebar"><a className="brand" href="/"><span className="brand-mark portal-brand-mark"><Image src="/prachurja-logo-final.jpeg" alt="" width={39} height={39}/></span><span><b>PRACHURJA</b><small>{viewer.role.toUpperCase()}</small></span></a><nav><a className="active" href={ownRoute}><BarChart3/>Workspace</a>{viewer.role==="admin"?<><a href="/client"><ClipboardCheck/>Client view</a><a href="/partner-portal"><PackageCheck/>Partner view</a><a href="/field"><Trees/>Field view</a><a href="/partner"><Users/>Partner intake</a></>:<a href="/assessment"><ClipboardCheck/>Assessments</a>}</nav><div className="portal-user"><b>{viewer.name}</b><span>{viewer.email}</span><form action="/auth/signout" method="post"><button type="submit">Sign out</button></form></div><a href="/">← Public site</a></aside><div className="dashboard-main"><header className="dashboard-header"><div><p className="eyebrow">{eyebrow}</p><h1>{title}</h1></div><span className="live-badge"><i/> Live workspace</span></header>{viewer.role==="admin"&&title==="Restoration operations overview"&&<AdminControlCentre/>}{children}</div></div>;
 }
 function Stat({value,label}:{value:string|number;label:string}){return <div className="stat"><strong>{value}</strong><span>{label}</span></div>}
 function State({children}:{children:React.ReactNode}){return <span className="status-pill">{children}</span>}

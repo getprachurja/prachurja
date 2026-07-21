@@ -45,7 +45,8 @@ test("protects every operational portal with server-side identity and roles", as
   for (const pathname of ["/client", "/partner-portal", "/field", "/admin"]) assert.match(route, new RegExp(pathname.replace("/", "\\/")));
   assert.match(route, /requireChatGPTUser/);
   assert.match(route, /canAccessPortal/);
-  assert.match(auth, /oai-authenticated-user-email/);
+  assert.match(auth, /createSupabaseServerClient/);
+  assert.match(auth, /supabase\.auth\.getUser/);
   assert.match(portal, /PRACHURJA_ADMIN_EMAILS/);
   assert.match(app, /AiCompanion/);
   assert.doesNotMatch(knowledge, /href="#"/);
@@ -72,18 +73,26 @@ test("ships a dedicated cart, Prach companion, distinct services, and complete f
 });
 
 test("provides a real administrator control centre", async () => {
-  const [control, contentApi, mediaApi, membersApi, portals] = await Promise.all([
+  const [control, manager, contentApi, catalogueApi, siteContentApi, mediaApi, membersApi, portals, migration] = await Promise.all([
     read("components/admin-control-centre.tsx"),
+    read("components/admin-content-manager.tsx"),
+    read("app/api/admin/content/route.ts"),
+    read("app/api/catalog/route.ts"),
     read("app/api/site-content/route.ts"),
     read("app/api/admin/media/route.ts"),
     read("app/api/admin/members/route.ts"),
     read("components/launch-portals.tsx"),
+    read("supabase/migrations/20260721114408_admin_content_management.sql"),
   ]);
   assert.match(control, /Website control centre/);
   assert.match(control, /Upload to library/);
   assert.match(control, /Users and roles/);
+  for (const label of ["Plants & trees", "Local products", "Blogs & guides", "Projects & impact"]) assert.match(manager, new RegExp(label.replace("&", "&")));
   assert.match(contentApi, /Administrator access required/);
+  assert.match(catalogueApi, /catalog_plants/);
+  assert.match(siteContentApi, /Administrator access required/);
   assert.match(mediaApi, /supabaseFunctionUrl/);
   assert.match(membersApi, /portal_members/);
+  for (const table of ["catalog_plants", "marketplace_products", "blog_posts", "restoration_projects"]) assert.match(migration, new RegExp(table));
   for (const route of ["/client", "/partner-portal", "/field"]) assert.match(portals, new RegExp(route.replace("/", "\\/")));
 });
