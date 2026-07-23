@@ -1,5 +1,6 @@
-import PlatformApp from "@/components/platform-app";
+import { RaasHomePage } from "@/components/raas/home-page";
+import { RaasSiteShell } from "@/components/raas/site-shell";
 
 export default function Home() {
-  return <PlatformApp />;
+  return <RaasSiteShell><RaasHomePage /></RaasSiteShell>;
 }
