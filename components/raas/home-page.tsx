@@ -1,129 +1,195 @@
-import { ArrowDownRight, ArrowRight, Gauge, Orbit, ScanLine, Sprout } from "lucide-react";
-import { activePillars, restorationProducts, revenueStreams } from "@/lib/raas-content";
-import { Eyebrow, ModelNote, SectionIntro, TextLink } from "@/components/raas/shared";
+import Image from "next/image";
+import { ArrowRight, Check, Leaf, Mountain, Trees, Waves } from "lucide-react";
+import {
+  activeRestorationPillars,
+  restorationProcess,
+} from "@/lib/raas-content";
+import { Eyebrow, SectionIntro, TextLink } from "@/components/raas/shared";
 
 export function RaasHomePage() {
   return (
     <main>
       <section className="raas-hero">
-        <div className="raas-hero-grid raas-shell">
+        <div className="raas-shell raas-hero-grid">
           <div className="raas-hero-copy">
-            <Eyebrow light>Restoration-as-a-Service · India</Eyebrow>
-            <h1>Restoration-<br />as-a-<em>Service.</em></h1>
-            <p className="raas-hero-lede">A ₹100 Crore business model for large-scale forest restoration and conservation infrastructure.</p>
-            <p>Transitioning natural liabilities into high-integrity corporate ESG assets through measurable ecological engineering.</p>
+            <Eyebrow>Native ecological restoration</Eyebrow>
+            <h1>
+              Native forests.
+              <em>Living landscapes.</em>
+            </h1>
+            <p>
+              We help degraded land recover through locally appropriate native
+              planting, living-soil care and long-term stewardship.
+            </p>
             <div className="raas-hero-actions">
-              <a className="raas-button raas-button-mint" href="/assessment">Scope a restoration project <ArrowRight /></a>
-              <a className="raas-button raas-button-ghost" href="/solutions">Explore engineered systems</a>
+              <a className="raas-button raas-button-primary" href="/assessment">
+                Discuss a restoration site
+                <ArrowRight aria-hidden="true" />
+              </a>
+              <a className="raas-button raas-button-secondary" href="/approach">
+                See our approach
+              </a>
             </div>
           </div>
-          <div className="raas-asset-visual" aria-label="Restoration asset system showing ecology, engineering and MRV">
-            <div className="raas-orbit orbit-one" />
-            <div className="raas-orbit orbit-two" />
-            <div className="raas-orbit orbit-three" />
-            <div className="raas-asset-core"><Sprout /><b>LIVING ASSET</b><span>Restoration · verified over time</span></div>
-            <div className="raas-float-card card-a"><ScanLine /><span><b>Continuous MRV</b>Satellite · LiDAR · drone</span></div>
-            <div className="raas-float-card card-b"><Orbit /><span><b>Stacked value</b>Clearing · biochar · carbon</span></div>
-            <div className="raas-float-card card-c"><Gauge /><span><b>Regional capacity</b>1,000 hectares / year</span></div>
-          </div>
-        </div>
-        <div className="raas-shell raas-hero-metrics">
-          <div><strong>₹100 CR</strong><span>Strategic run-rate ambition</span></div>
-          <div><strong>06</strong><span>Engineered restoration systems</span></div>
-          <div><strong>1,000 HA</strong><span>Regional annual capacity</span></div>
-          <div><strong>24+</strong><span>Months to registry-scale MRV</span></div>
+          <figure className="raas-hero-visual">
+            <div className="raas-hero-photo">
+              <Image
+                src="/hero-restoration.png"
+                alt="A field ecologist measuring a young native tree at a restoration nursery"
+                fill
+                sizes="(max-width: 800px) 100vw, 48vw"
+                priority
+                unoptimized
+              />
+            </div>
+            <figcaption>“Restoration begins by listening to the land.”</figcaption>
+          </figure>
         </div>
       </section>
 
-      <section className="raas-section raas-model-section">
-        <div className="raas-shell raas-model-grid">
+      <section className="raas-section raas-intro-section">
+        <div className="raas-shell raas-intro-grid">
           <SectionIntro
-            eyebrow="The B2B RaaS business model"
-            title="Measurable ecological outcomes."
-            copy="Instead of selling unmonitored plantations, Prachurja structures standardized, risk-managed forestry engineering solutions for corporate ESG and compliance markets."
+            eyebrow="Restoration, not just planting"
+            title="A site-specific path back to ecological function."
+            copy="A planting day is only one moment. Recovery begins with a baseline and continues through soil care, native species selection, establishment, maintenance and evidence."
           />
-          <div className="raas-principle-list">
-            <article><span>01</span><div><h3>Regulatory Alignment</h3><p>Meets compensatory afforestation and land-reclamation mandates.</p></div></article>
-            <article><span>02</span><div><h3>Continuous Tracking</h3><p>Direct integration with digital audit-ready satellite and LiDAR telemetry.</p></div></article>
-            <article><span>03</span><div><h3>High-Margin Scale</h3><p>Stacked monetization streams on the exact same land assets.</p></div></article>
+          <div className="raas-simple-points">
+            <article>
+              <Check aria-hidden="true" />
+              <div>
+                <h3>Native by design</h3>
+                <p>Species are chosen for the local ecosystem and the conditions of the site.</p>
+              </div>
+            </article>
+            <article>
+              <Check aria-hidden="true" />
+              <div>
+                <h3>Maintained through establishment</h3>
+                <p>Young systems are watered, weeded, protected and corrected as they develop.</p>
+              </div>
+            </article>
+            <article>
+              <Check aria-hidden="true" />
+              <div>
+                <h3>Measured honestly</h3>
+                <p>Survival, soil cover, canopy and field evidence are recorded against the baseline.</p>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
-      <section className="raas-section raas-dark-section">
+      <section className="raas-section raas-tinted-section">
         <div className="raas-shell">
           <SectionIntro
-            inverse
-            eyebrow="Core product architecture"
-            title="Six systems. One restoration asset."
-            copy="Three active-restoration products rebuild ecological function. Three conservation products secure water, soil and fire resilience."
+            eyebrow="What we work on"
+            title="Different landscapes need different answers."
+            copy="We combine restoration and resilience measures according to the land, not a fixed package."
           />
-          <div className="raas-product-preview">
-            {restorationProducts.map((product, index) => (
-              <a href={`/solutions#${product.id}`} key={product.id}>
-                <div><span>{String(index + 1).padStart(2, "0")}</span><b>{product.category}</b></div>
-                <h3>{product.name}</h3>
-                <p>{product.summary}</p>
-                <ArrowDownRight />
-              </a>
+          <div className="raas-focus-grid">
+            <a href="/solutions#invasive-management">
+              <Leaf aria-hidden="true" />
+              <h3>Degraded and invasive-dominated land</h3>
+              <p>Controlled removal, soil protection and native recovery.</p>
+              <span>Learn more <ArrowRight aria-hidden="true" /></span>
+            </a>
+            <a href="/miyawaki">
+              <Trees aria-hidden="true" />
+              <h3>Compact native forests</h3>
+              <p>Miyawaki-style forests for appropriate urban and institutional sites.</p>
+              <span>Learn more <ArrowRight aria-hidden="true" /></span>
+            </a>
+            <a href="/solutions#water-retention">
+              <Waves aria-hidden="true" />
+              <h3>Water-sensitive landscapes</h3>
+              <p>Terrain-led care for runoff, infiltration and root-zone moisture.</p>
+              <span>Learn more <ArrowRight aria-hidden="true" /></span>
+            </a>
+            <a href="/solutions#soil-protection">
+              <Mountain aria-hidden="true" />
+              <h3>Fragile soil and exposed slopes</h3>
+              <p>Living cover, erosion control and careful establishment.</p>
+              <span>Learn more <ArrowRight aria-hidden="true" /></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="raas-section">
+        <div className="raas-shell">
+          <SectionIntro
+            eyebrow="How restoration moves"
+            title="From baseline to a living system."
+          />
+          <ol className="raas-process-list">
+            {restorationProcess.map((step) => (
+              <li key={step.number}>
+                <span>{step.number}</span>
+                <h3>{step.title}</h3>
+                <p>{step.copy}</p>
+              </li>
             ))}
-          </div>
-          <TextLink href="/solutions" tone="light">See the complete product systems</TextLink>
+          </ol>
+          <TextLink href="/approach">Read the full approach</TextLink>
         </div>
       </section>
 
-      <section className="raas-section raas-method-teaser">
-        <div className="raas-shell">
-          <div className="raas-method-heading">
-            <SectionIntro
-              eyebrow="Active forest restoration"
-              title="Beyond conservation."
-              copy="Stopping the damage is only the first step. Active regeneration rebuilds natural mechanisms, remediates dead-soil chemistry and restores structural planting."
-            />
-            <blockquote>“How do we actively bring this system back?”</blockquote>
+      <section className="raas-section raas-miyawaki-callout">
+        <div className="raas-shell raas-miyawaki-grid">
+          <div>
+            <Eyebrow>Miyawaki native forests</Eyebrow>
+            <h2>A powerful method—when the site is right.</h2>
           </div>
+          <div>
+            <p>
+              Miyawaki planting can create a dense, layered native forest on a compact
+              site. It should follow a local reference study, careful soil preparation
+              and establishment care. It is not a replacement for every ecosystem or
+              every form of landscape restoration.
+            </p>
+            <a className="raas-button raas-button-primary" href="/miyawaki">
+              Explore the Miyawaki method
+              <ArrowRight aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="raas-section raas-pillars-section">
+        <div className="raas-shell">
+          <SectionIntro
+            eyebrow="The living system"
+            title="Plants, soil and wildlife recover together."
+          />
           <div className="raas-pillar-grid">
-            {activePillars.map((pillar) => (
-              <article key={pillar.number}>
-                <span>{pillar.number}</span>
+            {activeRestorationPillars.map((pillar, index) => (
+              <article key={pillar.title}>
+                <span>0{index + 1}</span>
                 <h3>{pillar.title}</h3>
                 <p>{pillar.copy}</p>
               </article>
             ))}
-          </div>
-          <TextLink href="/method">Enter the active restoration playbook</TextLink>
-        </div>
-      </section>
-
-      <section className="raas-section raas-economics-teaser">
-        <div className="raas-shell raas-economics-grid">
-          <div>
-            <SectionIntro
-              eyebrow="Invasive-to-Asset™ economics"
-              title="Three revenue streams. One cleared hectare."
-              copy="The proposal pools B2B clearing, biochar product sales and carbon-removal credits into a target gross yield of ₹2,50,000 per hectare."
-            />
-            <ModelNote>Financial figures are proposal assumptions and require project-level validation, contracting and registry eligibility.</ModelNote>
-            <TextLink href="/economics">Review the complete unit economics</TextLink>
-          </div>
-          <div className="raas-revenue-bars">
-            {revenueStreams.map((stream) => (
-              <div key={stream.label}>
-                <div><b>{stream.label}</b><span>₹{stream.value.toLocaleString("en-IN")} · {stream.share}%</span></div>
-                <i><span className={stream.color} style={{ width: `${stream.share}%` }} /></i>
-              </div>
-            ))}
-            <div className="raas-yield-total"><span>Target gross yield / hectare</span><strong>₹2,50,000</strong></div>
           </div>
         </div>
       </section>
 
       <section className="raas-final-cta">
         <div className="raas-shell">
-          <Eyebrow light>Scale your ESG infrastructure</Eyebrow>
-          <h2>Build high-integrity, data-verified biological assets.</h2>
-          <p>Begin with the land condition, mandate, target product system and verification requirement.</p>
-          <a className="raas-button raas-button-mint" href="/assessment">Start project scoping <ArrowRight /></a>
+          <div>
+            <Eyebrow>Start with the site</Eyebrow>
+            <h2>Tell us what the land needs.</h2>
+          </div>
+          <div>
+            <p>
+              Share the location, scale and current condition. We will begin with
+              suitability, constraints and the next useful field step.
+            </p>
+            <a className="raas-button raas-button-light" href="/assessment">
+              Begin a site assessment
+              <ArrowRight aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </section>
     </main>

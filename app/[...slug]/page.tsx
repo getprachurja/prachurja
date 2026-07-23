@@ -8,9 +8,8 @@ import {
   LaunchPartnerPortal,
 } from "@/components/launch-portals";
 import { RaasAssessmentPage } from "@/components/raas/assessment-page";
-import { EconomicsPage } from "@/components/raas/economics-page";
-import { InfrastructurePage } from "@/components/raas/infrastructure-page";
 import { MethodPage } from "@/components/raas/method-page";
+import { MiyawakiPage } from "@/components/raas/miyawaki-page";
 import { RaasSiteShell } from "@/components/raas/site-shell";
 import { SolutionsPage } from "@/components/raas/solutions-page";
 import { requireChatGPTUser } from "@/app/chatgpt-auth";
@@ -21,44 +20,66 @@ export const dynamic = "force-dynamic";
 const protectedPortals = new Set(["/client", "/partner-portal", "/field", "/admin"]);
 const publicPages = {
   "/solutions": SolutionsPage,
+  "/approach": MethodPage,
   "/method": MethodPage,
-  "/economics": EconomicsPage,
-  "/infrastructure": InfrastructurePage,
+  "/miyawaki": MiyawakiPage,
   "/assessment": RaasAssessmentPage,
 } as const;
 
 const pageMetadata: Record<string, { title: string; description: string }> = {
   "/solutions": {
-    title: "Engineered Restoration Systems",
-    description: "Six standardized restoration and conservation systems for enterprise-scale ecological infrastructure.",
+    title: "What We Restore",
+    description:
+      "Native planting, invasive management, soil repair, water-sensitive restoration and living landscape resilience.",
+  },
+  "/approach": {
+    title: "Our Restoration Approach",
+    description:
+      "An assessment-led path from ecological baseline to establishment, stewardship and field evidence.",
   },
   "/method": {
-    title: "Active Forest Restoration",
-    description: "Prachurja's active succession, subterranean health and trophic catalyst restoration method.",
+    title: "Our Restoration Approach",
+    description:
+      "An assessment-led path from ecological baseline to establishment, stewardship and field evidence.",
   },
-  "/economics": {
-    title: "RaaS Economics",
-    description: "The proposal's stacked per-hectare revenue model for clearing, biochar and carbon-removal value.",
-  },
-  "/infrastructure": {
-    title: "Regional Scale Blueprint",
-    description: "The regional infrastructure, operating model and roadmap designed for 1,000 hectares per year.",
+  "/miyawaki": {
+    title: "Miyawaki Native Forests",
+    description:
+      "A practical guide to when compact, dense native forest planting is—and is not—appropriate.",
   },
   "/assessment": {
-    title: "Scope a Restoration Project",
-    description: "Define a natural liability and begin an enterprise Restoration-as-a-Service assessment.",
+    title: "Discuss Your Site",
+    description:
+      "Share the location, condition and intended outcome of a potential ecological restoration site.",
   },
 };
 
-export async function generateMetadata({ params }: { params: Promise<{ slug?: string[] }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug?: string[] }>;
+}): Promise<Metadata> {
   const { slug = [] } = await params;
   const pathname = `/${slug.join("/")}`;
-  return pageMetadata[pathname] ?? { title: "Secure Workspace", robots: { index: false, follow: false } };
+  return (
+    pageMetadata[pathname] ?? {
+      title: "Secure Workspace",
+      robots: { index: false, follow: false },
+    }
+  );
 }
 
-export default async function PrototypeRoute({ params }: { params: Promise<{ slug?: string[] }> }) {
+export default async function PrototypeRoute({
+  params,
+}: {
+  params: Promise<{ slug?: string[] }>;
+}) {
   const { slug = [] } = await params;
   const pathname = `/${slug.join("/")}`;
+
+  if (pathname === "/economics" || pathname === "/infrastructure") {
+    redirect("/approach");
+  }
 
   if (pathname === "/portal") {
     const user = await requireChatGPTUser("/portal");
@@ -71,7 +92,12 @@ export default async function PrototypeRoute({ params }: { params: Promise<{ slu
     const user = await requireChatGPTUser(pathname);
     const role = await getPortalRole(user.email);
     if (!role || !canAccessPortal(role, pathname)) {
-      return <PortalAccessGate user={{ name: user.displayName, email: user.email }} assignedRole={role} />;
+      return (
+        <PortalAccessGate
+          user={{ name: user.displayName, email: user.email }}
+          assignedRole={role}
+        />
+      );
     }
     const viewer = { name: user.displayName, email: user.email, role };
     if (pathname === "/admin") return <LaunchAdminDashboard viewer={viewer} />;
@@ -82,5 +108,9 @@ export default async function PrototypeRoute({ params }: { params: Promise<{ slu
 
   const Page = publicPages[pathname as keyof typeof publicPages];
   if (!Page) notFound();
-  return <RaasSiteShell><Page /></RaasSiteShell>;
+  return (
+    <RaasSiteShell>
+      <Page />
+    </RaasSiteShell>
+  );
 }

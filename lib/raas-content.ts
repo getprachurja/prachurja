@@ -1,267 +1,228 @@
-export type RestorationProduct = {
+export type RestorationSystem = {
   id: string;
   name: string;
-  category: "Restoration" | "Conservation";
-  marker: string;
+  shortName: string;
+  category: "Restoration" | "Resilience";
   summary: string;
-  mechanism: string[];
+  steps: readonly string[];
   outcome: string;
 };
 
-export const restorationProducts: RestorationProduct[] = [
+export const restorationSystems: RestorationSystem[] = [
   {
-    id: "invasive-to-asset",
-    name: "Invasive-to-Asset™",
+    id: "invasive-management",
+    name: "Invasive vegetation management",
+    shortName: "Invasive management",
     category: "Restoration",
-    marker: "IA",
     summary:
-      "Aggressive mechanical extraction of invasive species like Gliricidia and Lantana. Biomass is processed on-site via mobile retort pyrolyzers into carbon-locking biochar.",
-    mechanism: [
-      "Species-specific mechanical extraction",
-      "Contained biomass movement",
-      "Mobile retort pyrolysis",
-      "Biochar enrichment and application",
+      "Remove invasive vegetation carefully, contain regrowth and reuse suitable biomass within the restoration plan.",
+    steps: [
+      "Map the invasive species and seed sources",
+      "Select a site-safe removal method",
+      "Contain, process or reuse biomass responsibly",
+      "Follow with native cover and repeat monitoring",
     ],
-    outcome: "Convert invasive biomass from a natural liability into a monitored restoration asset.",
+    outcome: "A controlled site that can begin a native recovery pathway.",
   },
   {
-    id: "endemic-pulse",
-    name: "Endemic Pulse™",
+    id: "native-plant-supply",
+    name: "Local native plant supply",
+    shortName: "Native plant supply",
     category: "Restoration",
-    marker: "EP",
     summary:
-      "Establishment of localized heritage nurseries. We preserve local genetic fidelity by collecting seeds exclusively from surrounding native mother trees.",
-    mechanism: [
-      "Mother-tree database",
-      "Local seed collection",
-      "Heritage nursery production",
-      "Traceable native planting stock",
+      "Build planting stock from locally appropriate native species, with traceable seed sources and nursery care.",
+    steps: [
+      "Study nearby reference ecosystems",
+      "Identify suitable mother trees and seed sources",
+      "Raise diverse planting stock in a local nursery",
+      "Match each species to its place in the site",
     ],
-    outcome: "Build locally faithful native plant supply for large-scale restoration.",
+    outcome: "Planting material that reflects local ecology rather than a generic species list.",
   },
   {
-    id: "miyawaki-plus",
-    name: "Miyawaki Plus™",
+    id: "miyawaki",
+    name: "Miyawaki native forests",
+    shortName: "Miyawaki forests",
     category: "Restoration",
-    marker: "MP",
     summary:
-      "Ultra-high-density four-tier native afforestation. Grid-based planting is integrated with organic hydrogels and automated drone growth tracking.",
-    mechanism: [
-      "Four-tier native structure",
-      "High-density grid installation",
-      "Organic hydrogel support",
-      "Automated drone growth tracking",
+      "Create compact, dense native forests where the site, soil, water and long-term purpose make the method appropriate.",
+    steps: [
+      "Read the original vegetation and present site constraints",
+      "Prepare compacted or depleted soil",
+      "Plant a mixed, multi-layer native community",
+      "Water, weed, mulch and monitor through establishment",
     ],
-    outcome: "Accelerate native canopy formation with measurable establishment tracking.",
+    outcome: "A small, structurally diverse native forest designed for a land-constrained site.",
   },
   {
-    id: "hydro-ridge",
-    name: "Hydro-Ridge™ Networks",
-    category: "Conservation",
-    marker: "HR",
+    id: "water-retention",
+    name: "Water-sensitive restoration",
+    shortName: "Water restoration",
+    category: "Resilience",
     summary:
-      "Precision terrain micro-sculpting using continuous contour trenches and check dams. Keeps water at the root zone during critical development.",
-    mechanism: [
-      "Continuous contour trenches",
-      "Check-dam networks",
-      "Root-zone water retention",
-      "Terrain-led runoff control",
+      "Slow runoff and retain water in the landscape using terrain-led interventions that support roots and soil.",
+    steps: [
+      "Read slope, drainage and seasonal flow",
+      "Protect existing water paths",
+      "Use contour work or small structures where suitable",
+      "Monitor erosion, infiltration and plant response",
     ],
-    outcome: "Retain critical moisture across restoration slopes and establishment zones.",
+    outcome: "More stable water movement and better moisture conditions for recovery.",
   },
   {
-    id: "terra-lock",
-    name: "Terra-Lock™ Soil Armor",
-    category: "Conservation",
-    marker: "TL",
+    id: "soil-protection",
+    name: "Soil repair and erosion control",
+    shortName: "Soil repair",
+    category: "Resilience",
     summary:
-      "Biodegradable coir and jute geotextile mats combined with native Vetiver grass. Anchors fragile topsoil during monsoons to protect young roots.",
-    mechanism: [
-      "Coir and jute geotextiles",
-      "Native Vetiver reinforcement",
-      "Monsoon erosion protection",
-      "Young-root stabilization",
+      "Rebuild soil cover, structure and biological activity while protecting fragile surfaces during monsoon periods.",
+    steps: [
+      "Assess compaction, erosion and organic matter",
+      "Protect exposed soil with suitable natural materials",
+      "Introduce organic amendments only where needed",
+      "Track soil cover and root-zone condition",
     ],
-    outcome: "Protect fragile soils while native restoration systems establish.",
+    outcome: "Protected topsoil and a healthier root zone for native vegetation.",
   },
   {
-    id: "pyro-shield",
-    name: "Pyro-Shield™ Firebreaks",
-    category: "Conservation",
-    marker: "PS",
+    id: "fire-resilience",
+    name: "Living fire resilience",
+    shortName: "Fire resilience",
+    category: "Resilience",
     summary:
-      "Strategic green firebreaks planted with fire-resistant, high-moisture native species. Interlinked with real-time early-detection drone thermal grids.",
-    mechanism: [
-      "Strategic green-firebreak planning",
-      "High-moisture native species",
-      "Drone thermal grids",
-      "Real-time early detection",
+      "Reduce fuel risk around vulnerable edges through maintenance, access planning and locally suitable living buffers.",
+    steps: [
+      "Map fuel loads, access and exposure",
+      "Retain ecologically valuable vegetation",
+      "Design maintained buffers for the local fire regime",
+      "Review the system before each fire season",
     ],
-    outcome: "Reduce fire exposure through living buffers and monitored detection systems.",
+    outcome: "A maintained landscape edge with lower avoidable fire exposure.",
   },
 ];
 
-export const activePillars = [
+export const restorationProcess = [
   {
     number: "01",
-    title: "Active Succession",
-    copy:
-      "Strategic installation of nitrogen-fixing pioneer species to block invasive light resources and build humus.",
+    title: "Read the land",
+    copy: "Begin with the existing vegetation, soil, water, land use, disturbance history and nearby reference ecosystems.",
   },
   {
     number: "02",
-    title: "Subterranean Health",
-    copy:
-      "Biological soil remediation targeting microscopic networks, toxin binding and forest moisture preservation.",
+    title: "Design for place",
+    copy: "Choose the right restoration method and native species for the site. Miyawaki is one option, not the default answer.",
   },
   {
     number: "03",
-    title: "Trophic Catalyst",
-    copy:
-      "Integrating critical seed-bearing keystone flora to attract migratory fauna, which drive automatic rewilding.",
+    title: "Establish carefully",
+    copy: "Prepare the site, plant in the right season and protect roots, soil moisture and young vegetation.",
+  },
+  {
+    number: "04",
+    title: "Steward over time",
+    copy: "Maintain, replace failures, manage regrowth and adapt the plan as the landscape responds.",
+  },
+  {
+    number: "05",
+    title: "Measure recovery",
+    copy: "Record survival, canopy, soil cover, water behaviour and field evidence against a documented baseline.",
   },
 ] as const;
 
-export const pioneerSpecies = [
+export const activeRestorationPillars = [
+  {
+    title: "Native succession",
+    copy: "Use early-stage native species to improve cover and conditions, then build toward a diverse, layered community.",
+  },
+  {
+    title: "Living soil",
+    copy: "Protect soil structure and encourage locally appropriate biological activity instead of treating soil as an inert growing medium.",
+  },
+  {
+    title: "Wildlife connections",
+    copy: "Include native food and habitat plants that help birds, insects and other fauna reconnect the recovering site to its landscape.",
+  },
+] as const;
+
+export const exampleSpecies = [
   {
     common: "Karanj",
     botanical: "Millettia pinnata",
-    role:
-      "Actively restores atmospheric nitrogen to sterile earth through root symbiosis. Decomposes into thick organic humus.",
+    note: "A potential pioneer for suitable local conditions; final selection follows site and provenance checks.",
   },
   {
     common: "Palas",
     botanical: "Butea monosperma",
-    role:
-      "Thrives in intensely compacted and degraded clay terrains. Deep roots break up physical blockages to aerate the soil.",
+    note: "A native species associated with dry deciduous landscapes and degraded terrain in parts of India.",
   },
   {
     common: "Khair",
     botanical: "Senegalia catechu",
-    role:
-      "Anchors highly eroded, stony slopes. Survives intense heat blocks while stabilizing water-stressed zones.",
+    note: "May support dry, stony or erosion-prone sites within its natural range.",
   },
-] as const;
-
-export const keystoneSpecies = [
   {
-    common: "The Ficus Dynasty",
-    botanical: "Peepal & Umbar",
-    role:
-      "Year-round asynchronous fruit production serves as a critical food oasis for forest birds.",
+    common: "Peepal and Umbar",
+    botanical: "Ficus religiosa and Ficus racemosa",
+    note: "Ficus species can provide important food resources where they belong in the local reference ecosystem.",
   },
   {
     common: "Jamun",
     botanical: "Syzygium cumini",
-    role:
-      "Fast-growing summer fruit-bearer that draws large frugivores, including hornbills and barbets.",
+    note: "A fruiting native tree for suitable moist and riparian settings within its natural range.",
   },
 ] as const;
 
-export const revenueStreams = [
-  { label: "B2B Clearing Fee", value: 150000, share: 60, color: "forest" },
-  { label: "Biochar Product Sales", value: 60000, share: 24, color: "mint" },
-  { label: "Carbon Removal Credits", value: 40000, share: 16, color: "gold" },
-] as const;
-
-export const operatingCosts = [
-  { label: "Extraction & Excavation", value: 45000 },
-  { label: "Pyrolysis & Biochar Enrichment", value: 35000 },
-  { label: "MRV Data Audit & Logistics", value: 20000 },
-] as const;
-
-export const infrastructureRows = [
+export const miyawakiLayers = [
   {
-    item: "Mobile Processing Spoke Fleet",
-    capex: "₹80,00,000",
-    opex: "₹2,80,000",
-    details: "Chippers, Excavators, Retort Kilns",
+    title: "Canopy",
+    copy: "Long-lived trees that can form the upper structure of the local forest community.",
   },
   {
-    item: "Central Finishing & Packing Yard",
-    capex: "₹25,00,000",
-    opex: "₹2,10,000",
-    details: "Inoculation tanks, Pulverizers, Land rent",
+    title: "Tree layer",
+    copy: "Medium-height native trees that build diversity below the main canopy.",
   },
   {
-    item: "Workforce & Labor Force",
-    capex: "—",
-    opex: "₹3,81,000",
-    details: "1 Operations Manager, 2 Operators, 12 Laborers",
+    title: "Sub-tree layer",
+    copy: "Smaller trees and woody species that occupy the middle structure.",
   },
   {
-    item: "Logistics & MRV Systems",
-    capex: "₹30,00,000",
-    opex: "₹2,00,000",
-    details: "3-Ton Trucks, Mapping Drones, Audits",
+    title: "Shrub layer",
+    copy: "Native shrubs that protect soil, fill lower space and provide habitat.",
   },
 ] as const;
 
-export const scaleRoadmap = [
+export const miyawakiStages = [
   {
-    period: "Months 1–6",
-    title: "Build the intelligence layer",
-    copy: "GIS mapping, drone survey systems and initial mother-tree database setup.",
+    number: "01",
+    title: "Reference study",
+    copy: "Study local remnant vegetation, soil, rainfall, drainage and the intended use of the site.",
   },
   {
-    period: "Months 6–12",
-    title: "Deploy processing capacity",
-    copy: "Deploy mobile pyrolysis spoke fleets and set up the central biochar yard.",
+    number: "02",
+    title: "Species community",
+    copy: "Select a diverse mix of locally native species across complementary vegetation layers.",
   },
   {
-    period: "Months 12–24",
-    title: "Secure anchor demand",
-    copy: "Secure massive multi-crore B2B corporate anchor contracts.",
+    number: "03",
+    title: "Soil preparation",
+    copy: "Relieve compaction and improve water-holding and organic structure according to test results.",
   },
   {
-    period: "Months 24+",
-    title: "Scale verified assets",
-    copy: "Integrate digital MRV on credit registries. Scale to a ₹100 CR run-rate.",
-  },
-] as const;
-
-export const restorationTimeline = [
-  {
-    period: "Day 1–3",
-    copy:
-      "Clear invasive species and gently loosen top compacted soils with broadforks to preserve earth profiles.",
+    number: "04",
+    title: "Dense planting",
+    copy: "Plant a mixed community closely enough to encourage vertical competition without creating a uniform grid.",
   },
   {
-    period: "Day 4–5",
-    copy:
-      "Amend bare soils with biochar. Apply compost-tea extracts to inoculate biology.",
-  },
-  {
-    period: "Day 6–10",
-    copy:
-      "Install heavy cardboard barrier layers and pile thick wood mulch to suppress invasive seed hatch.",
-  },
-  {
-    period: "Next Rainy Season",
-    copy:
-      "Plant 70% pioneers and 30% keystone bird magnets through the sheet mulch to secure permanent canopy closure.",
+    number: "05",
+    title: "Establishment care",
+    copy: "Mulch, water, weed, replace failures and record the response until the forest is securely established.",
   },
 ] as const;
 
-export const microbialRecipe = [
-  {
-    component: "De-chlorinated Water",
-    metric: "18 Liters",
-    goal: "Safe aqueous environment with chlorine gassed off beforehand.",
-  },
-  {
-    component: "Forest Inoculant + Vermicompost",
-    metric: "3 Cups (mesh suspended)",
-    goal: "Raw starter cultures of indigenous local bacteria and forest fungi.",
-  },
-  {
-    component: "Blackstrap Molasses",
-    metric: "2 Tablespoons",
-    goal: "Simple sugars that cause a rapid bacterial population bloom.",
-  },
-  {
-    component: "Liquid Kelp & Humic Acid",
-    metric: "1.5 Tablespoons",
-    goal: "Complex foods that support fungal hyphae growth for trees.",
-  },
+export const monitoringMeasures = [
+  "Plant survival and replacement",
+  "Canopy development and vertical structure",
+  "Native recruitment and invasive regrowth",
+  "Soil cover, erosion and moisture condition",
+  "Photo points and repeatable field observations",
 ] as const;

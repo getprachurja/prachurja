@@ -1,61 +1,103 @@
-import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { restorationProducts } from "@/lib/raas-content";
-import { Eyebrow, PageHero, SectionIntro } from "@/components/raas/shared";
+import { ArrowRight, Check } from "lucide-react";
+import { restorationSystems } from "@/lib/raas-content";
+import { PageHero, SectionIntro } from "@/components/raas/shared";
 
 export function SolutionsPage() {
-  const restoration = restorationProducts.filter((item) => item.category === "Restoration");
-  const conservation = restorationProducts.filter((item) => item.category === "Conservation");
+  const restoration = restorationSystems.filter((item) => item.category === "Restoration");
+  const resilience = restorationSystems.filter((item) => item.category === "Resilience");
 
   return (
     <main>
       <PageHero
-        index="01"
-        eyebrow="Core forest products"
-        title="Engineered restoration systems."
-        copy="A connected product architecture spanning invasive-biomass conversion, local genetic fidelity, high-density native establishment, water retention, soil protection and living fire resilience."
+        eyebrow="What we restore"
+        title="The method follows the land."
+        copy="Prachurja brings together native planting, soil and water care, invasive management and long-term stewardship. Each site receives the combination it actually needs."
       />
-      <ProductGroup title="Core Forest Restoration Products" eyebrow="Rebuild ecological function" items={restoration} />
-      <ProductGroup title="Core Forest Conservation Products" eyebrow="Secure the living asset" items={conservation} tone="sage" />
-      <section className="raas-section raas-systems-flow">
-        <div className="raas-shell">
-          <SectionIntro eyebrow="Integrated delivery" title="From liability to verified asset." />
-          <ol>
-            {["Map the natural liability", "Select the engineered system", "Deploy regional field capacity", "Track the ecological response", "Audit the outcome and asset value"].map((item, index) => (
-              <li key={item}><span>{String(index + 1).padStart(2, "0")}</span><b>{item}</b>{index < 4 && <ArrowRight />}</li>
+      <SystemGroup
+        eyebrow="Ecological recovery"
+        title="Restore native structure and function."
+        items={restoration}
+      />
+      <SystemGroup
+        eyebrow="Landscape resilience"
+        title="Protect soil, water and vulnerable edges."
+        items={resilience}
+        tinted
+      />
+      <section className="raas-section raas-decision-section">
+        <div className="raas-shell raas-decision-grid">
+          <SectionIntro
+            eyebrow="No fixed package"
+            title="The first deliverable is a sound restoration decision."
+            copy="A baseline assessment identifies what to retain, what to repair, where to intervene and which claims can be measured responsibly."
+          />
+          <div className="raas-decision-list">
+            {[
+              "Existing native vegetation is protected first",
+              "Methods are matched to the original ecosystem",
+              "Species selection considers provenance and site condition",
+              "Maintenance and monitoring are designed before planting",
+            ].map((item) => (
+              <p key={item}>
+                <Check aria-hidden="true" />
+                {item}
+              </p>
             ))}
-          </ol>
+            <a className="raas-button raas-button-primary" href="/assessment">
+              Discuss your site
+              <ArrowRight aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </section>
     </main>
   );
 }
 
-function ProductGroup({
-  title,
+function SystemGroup({
   eyebrow,
+  title,
   items,
-  tone = "cream",
+  tinted = false,
 }: {
-  title: string;
   eyebrow: string;
-  items: typeof restorationProducts;
-  tone?: "cream" | "sage";
+  title: string;
+  items: typeof restorationSystems;
+  tinted?: boolean;
 }) {
   return (
-    <section className={`raas-section raas-product-group ${tone}`} id={items[0]?.category.toLowerCase()}>
+    <section className={`raas-section raas-system-group${tinted ? " tinted" : ""}`}>
       <div className="raas-shell">
         <SectionIntro eyebrow={eyebrow} title={title} />
-        <div className="raas-detailed-products">
-          {items.map((product, index) => (
-            <article id={product.id} key={product.id}>
-              <div className="raas-product-marker"><span>{product.marker}</span><small>0{index + 1}</small></div>
-              <div className="raas-product-copy">
-                <Eyebrow>{product.category} system</Eyebrow>
-                <h2>{product.name}</h2>
-                <p className="lead">{product.summary}</p>
-                <ul>{product.mechanism.map((item) => <li key={item}><CheckCircle2 />{item}</li>)}</ul>
-              </div>
-              <aside><span>System outcome</span><p>{product.outcome}</p><a href={`/assessment?system=${product.id}`}>Scope this system <ArrowRight /></a></aside>
+        <div className="raas-system-list">
+          {items.map((system, index) => (
+            <article id={system.id} key={system.id}>
+              <header>
+                <span>0{index + 1}</span>
+                <div>
+                  <p>{system.category}</p>
+                  <h2>{system.name}</h2>
+                  <strong>{system.summary}</strong>
+                </div>
+              </header>
+              <ol>
+                {system.steps.map((step) => (
+                  <li key={step}>
+                    <Check aria-hidden="true" />
+                    {step}
+                  </li>
+                ))}
+              </ol>
+              <footer>
+                <span>Intended outcome</span>
+                <p>{system.outcome}</p>
+                {system.id === "miyawaki" && (
+                  <a href="/miyawaki">
+                    Read the Miyawaki guide
+                    <ArrowRight aria-hidden="true" />
+                  </a>
+                )}
+              </footer>
             </article>
           ))}
         </div>

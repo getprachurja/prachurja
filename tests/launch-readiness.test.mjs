@@ -5,60 +5,95 @@ import test from "node:test";
 const root = new URL("../", import.meta.url);
 const read = (path) => readFile(new URL(path, root), "utf8");
 
-test("public website follows the RaaS proposal architecture", async () => {
-  const [route, shell, home, content] = await Promise.all([
+test("public website is focused on ecological restoration", async () => {
+  const [route, shell, home, content, metadata] = await Promise.all([
     read("app/[...slug]/page.tsx"),
     read("components/raas/site-shell.tsx"),
     read("components/raas/home-page.tsx"),
     read("lib/raas-content.ts"),
+    read("app/layout.tsx"),
   ]);
 
-  for (const pathname of ["/solutions", "/method", "/economics", "/infrastructure", "/assessment"]) {
+  for (const pathname of ["/approach", "/solutions", "/miyawaki", "/assessment"]) {
     assert.match(route, new RegExp(pathname.replace("/", "\\/")));
+    assert.match(shell, new RegExp(`href="${pathname.replace("/", "\\/")}`));
   }
-  for (const removed of ["/cart", "/nursery", "/marketplace", "/blog", "/knowledge", "/services"]) {
-    assert.doesNotMatch(route, new RegExp(`"${removed.replace("/", "\\/")}"`));
+
+  for (const removed of ["/cart", "/nursery", "/marketplace", "/blog", "/economics", "/infrastructure"]) {
     assert.doesNotMatch(shell, new RegExp(`href="${removed.replace("/", "\\/")}`));
   }
-  assert.match(home, /Restoration-as-a-Service/);
-  assert.match(home, /₹100 Crore/);
-  assert.match(home, /natural liabilities/i);
-  for (const product of ["Invasive-to-Asset", "Endemic Pulse", "Miyawaki Plus", "Hydro-Ridge", "Terra-Lock", "Pyro-Shield"]) {
-    assert.match(content, new RegExp(product));
+
+  assert.match(home, /Native forests/);
+  assert.match(home, /Restoration begins by listening to the land/);
+  assert.match(content, /Miyawaki native forests/);
+  assert.match(metadata, /Ecological Restoration/);
+});
+
+test("commercial plan figures are not exposed by the public experience", async () => {
+  const publicSources = (
+    await Promise.all([
+      read("components/raas/home-page.tsx"),
+      read("components/raas/solutions-page.tsx"),
+      read("components/raas/method-page.tsx"),
+      read("components/raas/miyawaki-page.tsx"),
+      read("components/raas/assessment-page.tsx"),
+      read("components/raas/site-shell.tsx"),
+      read("lib/raas-content.ts"),
+      read("app/layout.tsx"),
+    ])
+  ).join("\n");
+
+  for (const internalOnly of [
+    "100 Crore",
+    "₹100",
+    "per-hectare economics",
+    "High-Margin Scale",
+    "Capital expenditure",
+    "Target gross yield",
+  ]) {
+    assert.doesNotMatch(publicSources, new RegExp(internalOnly, "i"));
   }
 });
 
-test("active restoration method includes the technical proposal", async () => {
-  const [method, content] = await Promise.all([
-    read("components/raas/method-page.tsx"),
+test("Miyawaki content includes suitability, limits and establishment", async () => {
+  const [page, content] = await Promise.all([
+    read("components/raas/miyawaki-page.tsx"),
     read("lib/raas-content.ts"),
   ]);
-  for (const pillar of ["Active Succession", "Subterranean Health", "Trophic Catalyst"]) assert.match(content, new RegExp(pillar));
-  for (const species of ["Karanj", "Palas", "Khair", "Peepal", "Umbar", "Jamun"]) assert.match(content, new RegExp(species));
-  assert.match(method, /10<sup>9<\/sup>/);
-  for (const measure of ["90%", "18 Liters", "3 Cups", "2 Tablespoons", "1.5 Tablespoons", "70% pioneers", "30% keystone"]) {
-    assert.match(`${method}\n${content}`, new RegExp(measure));
+  for (const topic of [
+    "local forest reference",
+    "Natural grasslands",
+    "wetlands",
+    "Canopy",
+    "Tree layer",
+    "Sub-tree layer",
+    "Shrub layer",
+    "Establishment care",
+  ]) {
+    assert.match(`${page}\n${content}`, new RegExp(topic, "i"));
   }
 });
 
-test("commercial model reproduces the proposal assumptions", async () => {
-  const [economics, infrastructure, content] = await Promise.all([
-    read("components/raas/economics-page.tsx"),
-    read("components/raas/infrastructure-page.tsx"),
-    read("lib/raas-content.ts"),
+test("Prach uses a server-only Groq route and excludes internal financial guidance", async () => {
+  const [shell, companion, endpoint, env] = await Promise.all([
+    read("components/raas/site-shell.tsx"),
+    read("components/raas/prach-companion.tsx"),
+    read("app/api/ai/route.ts"),
+    read(".env.example"),
   ]);
-  for (const amount of ["2,50,000", "1,00,000", "1,50,000"]) assert.match(economics, new RegExp(amount));
-  for (const amount of ["value: 150000", "value: 60000", "value: 40000", "value: 45000", "value: 35000", "value: 20000"]) {
-    assert.match(content, new RegExp(amount));
-  }
-  for (const amount of ["₹80,00,000", "₹25,00,000", "₹30,00,000", "₹1,35,00,000", "₹10,71,000", "1,000"]) {
-    assert.match(`${infrastructure}\n${content}`, new RegExp(amount.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
-  }
-  for (const phase of ["Months 1–6", "Months 6–12", "Months 12–24", "Months 24+"]) assert.match(content, new RegExp(phase.replace("+", "\\+")));
-  assert.match(economics, /proposal assumptions/i);
+  assert.match(shell, /PrachCompanion/);
+  assert.match(companion, /fetch\("\/api\/ai"/);
+  assert.match(companion, /Is Miyawaki right for my site/);
+  assert.match(endpoint, /process\.env\.GROQ_API_KEY/);
+  assert.match(endpoint, /https:\/\/api\.groq\.com/);
+  assert.match(endpoint, /Do not provide prices/);
+  assert.match(endpoint, /localAnswer/);
+  assert.doesNotMatch(companion, /gsk_/);
+  assert.doesNotMatch(endpoint, /gsk_/);
+  assert.match(env, /GROQ_API_KEY=/);
 });
 
-test("enterprise assessment writes to the secured backend", async () => {
+test("site assessment writes to the secured backend without public price bands", async () => {
   const [form, endpoint, backend, migration] = await Promise.all([
     read("components/raas/assessment-page.tsx"),
     read("app/api/assessments/route.ts"),
@@ -66,13 +101,13 @@ test("enterprise assessment writes to the secured backend", async () => {
     read("supabase/migrations/20260720000100_launch_backend.sql"),
   ]);
   assert.match(form, /fetch\("\/api\/assessments"/);
-  assert.match(form, /Satellite, LiDAR & drone MRV/);
+  assert.match(form, /Miyawaki native forest/);
+  assert.match(form, /Discuss after assessment/);
+  assert.doesNotMatch(form, /Below ₹/);
   assert.match(endpoint, /assessment_requests/);
   assert.match(endpoint, /status: "New"/);
   assert.match(backend, /SUPABASE_APP_SECRET/);
-  assert.match(backend, /x-prachurja-app-key/);
   assert.match(migration, /enable row level security/);
-  assert.match(migration, /private\.has_valid_app_secret/);
 });
 
 test("operational portals remain separate and role protected", async () => {
@@ -83,16 +118,18 @@ test("operational portals remain separate and role protected", async () => {
     read("components/admin-control-centre.tsx"),
     read("components/launch-portals.tsx"),
   ]);
-  for (const pathname of ["/client", "/partner-portal", "/field", "/admin"]) assert.match(route, new RegExp(pathname.replace("/", "\\/")));
+  for (const pathname of ["/client", "/partner-portal", "/field", "/admin"]) {
+    assert.match(route, new RegExp(pathname.replace("/", "\\/")));
+  }
   assert.match(route, /requireChatGPTUser/);
   assert.match(route, /canAccessPortal/);
   assert.match(auth, /supabase\.auth\.getUser/);
   assert.match(roles, /PRACHURJA_ADMIN_EMAILS/);
-  assert.match(admin, /RaaS operations control/);
   assert.match(admin, /Evidence media/);
   assert.match(admin, /Users & roles/);
-  for (const pathname of ["/client", "/partner-portal", "/field"]) assert.match(portals, new RegExp(pathname.replace("/", "\\/")));
-  assert.doesNotMatch(portals, /href="\/partner"/);
+  for (const pathname of ["/client", "/partner-portal", "/field"]) {
+    assert.match(portals, new RegExp(pathname.replace("/", "\\/")));
+  }
 });
 
 test("Sites project remains connected", async () => {
