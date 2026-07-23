@@ -20,7 +20,7 @@ export function LoginForm({ initialNotice }: { initialNotice?: string }) {
     <main className="portal-login">
       <section className="portal-login-card">
         <a className="portal-login-brand" href="/">
-          <Image src="/prachurja-logo-final.jpeg" alt="" width={54} height={54}/>
+          <Image src="/prachurja-logo-final.jpeg" alt="" width={54} height={54} unoptimized/>
           <span><b>PRACHURJA</b><small>SECURE WORKSPACES</small></span>
         </a>
         <div className="portal-login-icon"><Leaf/></div>

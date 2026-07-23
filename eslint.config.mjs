@@ -10,26 +10,6 @@ const eslintConfig = defineConfig([
       "@next/next/no-html-link-for-pages": "off",
     },
   },
-  {
-    files: ["components/platform-app.tsx"],
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-      "@next/next/no-img-element": "off",
-      "react-hooks/incompatible-library": "off",
-    },
-  },
-  {
-    files: ["components/assessment-form.tsx"],
-    rules: {
-      "react-hooks/incompatible-library": "off",
-    },
-  },
-  {
-    files: ["components/knowledge-hub.tsx"],
-    rules: {
-      "@next/next/no-img-element": "off",
-    },
-  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -38,6 +18,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "dist/**",
     "work/**",
+    "tmp/**",
     ".wrangler/**",
     "next-env.d.ts",
   ]),

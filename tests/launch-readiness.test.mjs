@@ -92,6 +92,7 @@ test("operational portals remain separate and role protected", async () => {
   assert.match(admin, /Evidence media/);
   assert.match(admin, /Users & roles/);
   for (const pathname of ["/client", "/partner-portal", "/field"]) assert.match(portals, new RegExp(pathname.replace("/", "\\/")));
+  assert.doesNotMatch(portals, /href="\/partner"/);
 });
 
 test("Sites project remains connected", async () => {

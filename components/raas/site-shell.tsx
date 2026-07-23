@@ -23,7 +23,7 @@ export function RaasSiteShell({ children }: { children: React.ReactNode }) {
       <header className="raas-header">
         <div className="raas-shell raas-header-inner">
           <a className="raas-brand" href="/" aria-label="Prachurja Restoration-as-a-Service home">
-            <Image src="/prachurja-logo-final.jpeg" alt="" width={48} height={48} priority />
+            <Image src="/prachurja-logo-final.jpeg" alt="" width={48} height={48} priority unoptimized />
             <span><b>PRACHURJA</b><small>RESTORATION-AS-A-SERVICE</small></span>
           </a>
           <nav className="raas-desktop-nav" aria-label="Primary navigation">
@@ -45,7 +45,7 @@ export function RaasSiteShell({ children }: { children: React.ReactNode }) {
         <div className="raas-shell">
           <div className="raas-footer-lead">
             <div className="raas-footer-brand">
-              <Image src="/prachurja-logo-final.jpeg" alt="" width={72} height={72} />
+              <Image src="/prachurja-logo-final.jpeg" alt="" width={72} height={72} unoptimized />
               <div><b>PRACHURJA</b><span>Restoration-as-a-Service</span></div>
             </div>
             <p>Build high-integrity, data-verified biological assets through large-scale ecological engineering.</p>
