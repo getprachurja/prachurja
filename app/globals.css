@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 :root {
+  --font-sans: "Segoe UI", Arial, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, monospace;
+  --font-display: Georgia, "Times New Roman", serif;
   --forest: #173f35;
   --forest-2: #0d2d26;
   --moss: #5e7351;

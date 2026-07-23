@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "./raas.css";
-
-const geist = Geist({ variable: "--font-sans", subsets: ["latin"] });
-const mono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] });
-const display = Playfair_Display({ variable: "--font-display", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://prachurja-six.vercel.app"),
@@ -44,7 +39,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${mono.variable} ${display.variable}`}>
+    <html lang="en">
       <body>{children}</body>
     </html>
   );
