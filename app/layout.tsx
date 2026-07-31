@@ -5,8 +5,8 @@ import "./raas.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://prachurja-six.vercel.app"),
   title: {
-    default: "Prachurja — Ecological Restoration & Native Nursery",
-    template: "%s · Prachurja",
+    default: "Prachurja™ — Ecological Restoration & Native Nursery",
+    template: "%s · Prachurja™",
   },
   description:
     "Native plants, ecological restoration, Miyawaki forests, living-soil care and long-term landscape stewardship in India.",
@@ -16,20 +16,20 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    title: "Prachurja — Ecological Restoration & Native Nursery",
+    title: "Prachurja™ — Ecological Restoration & Native Nursery",
     description: "Native plants, living forests and landscapes restored with care.",
     images: [
       {
         url: "/prachurja-logo-final.jpeg",
         width: 1254,
         height: 1254,
-        alt: "Prachurja",
+        alt: "Prachurja trademark emblem",
       },
     ],
   },
   twitter: {
     card: "summary",
-    title: "Prachurja — Ecological Restoration & Native Nursery",
+    title: "Prachurja™ — Ecological Restoration & Native Nursery",
     description: "Native plants, living forests and landscapes restored with care.",
     images: ["/prachurja-logo-final.jpeg"],
   },

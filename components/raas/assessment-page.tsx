@@ -51,7 +51,7 @@ const defaults: Values = {
   objective: "Site assessment and restoration plan",
   timeline: "Exploring options",
   budget: "Discuss after assessment",
-  maintenance: "Prachurja-supported establishment",
+  maintenance: "Prachurja™-supported establishment",
   reporting: "Field records and photo monitoring",
   message: "",
   website: "",
@@ -129,7 +129,7 @@ export function RaasAssessmentPage() {
           <h1>Thank you. We can begin with the land.</h1>
           <span>Reference <b>{reference}</b></span>
           <p>
-            Prachurja can now review the current condition, intended outcome and
+            Prachurja™ can now review the current condition, intended outcome and
             most useful next step.
           </p>
           <a className="raas-button raas-button-primary" href="/">
@@ -176,7 +176,7 @@ export function RaasAssessmentPage() {
             </ol>
             <div>
               <ShieldCheck aria-hidden="true" />
-              <p>Your information is stored securely for Prachurja’s assessment workflow.</p>
+              <p>Your information is stored securely for Prachurja™’s assessment workflow.</p>
             </div>
           </aside>
 
@@ -250,7 +250,7 @@ export function RaasAssessmentPage() {
                     <select {...register("timeline")}><option>Exploring options</option><option>Within 3 months</option><option>Within 6–12 months</option><option>Long-term planning</option></select>
                   </Field>
                   <Field label="Support needed">
-                    <select {...register("maintenance")}><option>Prachurja-supported establishment</option><option>Assessment and design only</option><option>Implementation and maintenance</option><option>Monitoring and review</option><option>Not sure yet</option></select>
+                    <select {...register("maintenance")}><option>Prachurja™-supported establishment</option><option>Assessment and design only</option><option>Implementation and maintenance</option><option>Monitoring and review</option><option>Not sure yet</option></select>
                   </Field>
                   <Field label="Preferred records">
                     <select {...register("reporting")}><option>Field records and photo monitoring</option><option>Periodic ecological report</option><option>Organisation-ready progress report</option><option>To be discussed</option></select>

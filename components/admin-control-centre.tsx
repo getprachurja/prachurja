@@ -109,7 +109,7 @@ export default function AdminControlCentre() {
       <div className="admin-control-head">
         <div>
           <p className="eyebrow">RaaS operations control</p>
-          <h2>Manage Prachurja</h2>
+          <h2>Manage Prachurja™</h2>
           <p>Control the nursery catalogue, editorial content, secure workspaces and restoration evidence from one authenticated console.</p>
         </div>
         <a className="button button-secondary" href="/" target="_blank">View public website <ExternalLink /></a>

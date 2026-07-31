@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Leaf, MessageCircle, Send, X } from "lucide-react";
 
 type ChatMessage = {
@@ -11,7 +11,7 @@ type ChatMessage = {
 const welcome: ChatMessage = {
   role: "assistant",
   content:
-    "Hello, I’m Prach. I can help you explore the native nursery, explain Prachurja’s restoration approach, or guide you to the right next step.",
+    "Hello, I’m Prach. I can help you explore the native nursery, explain Prachurja™’s restoration approach, find a field note, or guide you to the right next step.",
 };
 
 const quickPrompts = [
@@ -26,6 +26,12 @@ export function PrachCompanion() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const openPrach = () => setOpen(true);
+    window.addEventListener("prach:open", openPrach);
+    return () => window.removeEventListener("prach:open", openPrach);
+  }, []);
 
   async function ask(question: string) {
     const trimmed = question.trim();
@@ -77,7 +83,7 @@ export function PrachCompanion() {
               <span><Leaf aria-hidden="true" /></span>
               <div>
                 <b id="prach-title">Prach</b>
-                <small>Prachurja restoration guide</small>
+                <small>Prachurja™ restoration guide</small>
               </div>
             </div>
             <button type="button" aria-label="Close Prach" onClick={() => setOpen(false)}>

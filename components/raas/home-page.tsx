@@ -6,9 +6,11 @@ import {
 } from "@/lib/raas-content";
 import { Eyebrow, SectionIntro, TextLink } from "@/components/raas/shared";
 import { NurseryPlantCard } from "@/components/raas/nursery-plant-card";
+import { BlogCard } from "@/components/raas/blog-card";
 import type { NurseryPlant } from "@/lib/nursery";
+import type { BlogPost } from "@/lib/blog-data";
 
-export function RaasHomePage({ featuredPlants }: { featuredPlants: NurseryPlant[] }) {
+export function RaasHomePage({ featuredPlants, featuredPosts }: { featuredPlants: NurseryPlant[]; featuredPosts: BlogPost[] }) {
   return (
     <main>
       <section className="raas-hero">
@@ -198,6 +200,20 @@ export function RaasHomePage({ featuredPlants }: { featuredPlants: NurseryPlant[
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="raas-section raas-home-journal">
+        <div className="raas-shell">
+          <div className="raas-home-nursery-head">
+            <SectionIntro
+              eyebrow="From the field journal"
+              title="Useful context before the work begins."
+              copy="Plain-language notes on native species, living soil, habitat and long-term establishment."
+            />
+            <a className="raas-button raas-button-secondary" href="/blog">Visit the journal <ArrowRight aria-hidden="true" /></a>
+          </div>
+          <div className="raas-blog-grid">{featuredPosts.map((post) => <BlogCard post={post} key={post.id} />)}</div>
         </div>
       </section>
 

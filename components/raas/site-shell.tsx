@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, Mail, Menu, MessageCircle, ShoppingBag, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { PrachCompanion } from "@/components/raas/prach-companion";
@@ -14,6 +14,7 @@ const navigation = [
   ["/nursery", "Native nursery"],
   ["/solutions", "What we restore"],
   ["/miyawaki", "Miyawaki forests"],
+  ["/blog", "Field journal"],
 ] as const;
 
 export function RaasSiteShell({ children }: { children: React.ReactNode }) {
@@ -37,7 +38,7 @@ function RaasSiteFrame({ children }: { children: React.ReactNode }) {
       </a>
       <header className="raas-header">
         <div className="raas-shell raas-header-inner">
-          <Link className="raas-brand" href="/" aria-label="Prachurja home">
+          <Link className="raas-brand" href="/" aria-label="Prachurja trademark home">
             <Image
               src="/prachurja-logo-final.jpeg"
               alt=""
@@ -47,7 +48,7 @@ function RaasSiteFrame({ children }: { children: React.ReactNode }) {
               unoptimized
             />
             <span>
-              <b>PRACHURJA</b>
+              <b>PRACHURJA<sup>™</sup></b>
               <small>Ecological restoration</small>
             </span>
           </Link>
@@ -99,18 +100,25 @@ function RaasSiteFrame({ children }: { children: React.ReactNode }) {
 
       <footer className="raas-footer">
         <div className="raas-shell">
+          <div className="raas-footer-help">
+            <div><p className="raas-eyebrow"><span />Not sure where to begin?</p><h2>Start with the land. We’ll help you find the next useful step.</h2></div>
+            <div>
+              <button className="raas-button raas-button-light" type="button" onClick={() => window.dispatchEvent(new CustomEvent("prach:open"))}><MessageCircle aria-hidden="true" />Ask Prach</button>
+              <Link className="raas-button raas-button-footer-outline" href="/assessment">Discuss your site <ArrowRight aria-hidden="true" /></Link>
+            </div>
+          </div>
           <div className="raas-footer-grid">
             <div className="raas-footer-about">
               <div className="raas-footer-brand">
                 <Image
                   src="/prachurja-logo-final.jpeg"
-                  alt="Prachurja emblem"
+                  alt="Prachurja trademark emblem"
                   width={82}
                   height={82}
                   unoptimized
                 />
                 <div>
-                  <b>prachurja</b>
+                  <b>prachurja<sup>™</sup></b>
                   <span>Ecological restoration, rooted in place.</span>
                 </div>
               </div>
@@ -118,6 +126,7 @@ function RaasSiteFrame({ children }: { children: React.ReactNode }) {
                 We plan, establish and steward native ecosystems for organisations,
                 communities and landholders in India.
               </p>
+              <a className="raas-footer-email" href="mailto:hello@prachurja.com"><Mail aria-hidden="true" />hello@prachurja.com</a>
             </div>
             <div>
               <b>Explore</b>
@@ -126,25 +135,33 @@ function RaasSiteFrame({ children }: { children: React.ReactNode }) {
               <Link href="/cart">Your cart</Link>
               <Link href="/solutions">Restoration work</Link>
               <Link href="/miyawaki">Miyawaki forests</Link>
+              <Link href="/blog">Field journal</Link>
             </div>
             <div>
-              <b>Restoration topics</b>
+              <b>Learn</b>
+              <Link href="/blog/why-native-species-matter">Why native species matter</Link>
+              <Link href="/blog/plantation-versus-restoration">Plantation vs restoration</Link>
+              <Link href="/blog/pioneer-species-and-soil">Pioneer species and soil</Link>
+              <Link href="/blog/long-term-maintenance">Long-term maintenance</Link>
+            </div>
+            <div>
+              <b>Get started</b>
               <Link href="/solutions#invasive-management">Invasive management</Link>
               <Link href="/solutions#native-plant-supply">Native plant supply</Link>
-              <Link href="/approach#soil">Living soil</Link>
-              <Link href="/approach#monitoring">Monitoring</Link>
               <Link href="/assessment">Site assessment</Link>
+              <Link href="/cart">Nursery cart</Link>
             </div>
             <div>
-              <b>Workspaces</b>
-              <Link href="/login">Team sign in</Link>
-              <Link href="/portal">Client and field portal</Link>
-              <a href="mailto:hello@prachurja.com">hello@prachurja.com</a>
+              <b>Secure workspaces</b>
+              <Link href="/login">Admin sign in</Link>
+              <Link href="/portal">Client portal</Link>
+              <Link href="/portal">Partner portal</Link>
+              <Link href="/portal">Field workspace</Link>
             </div>
           </div>
           <div className="raas-footer-base">
-            <span>© {new Date().getFullYear()} Prachurja</span>
-            <span>Native plants · healthy soil · living landscapes</span>
+            <span>© {new Date().getFullYear()} Prachurja™. All rights reserved.</span>
+            <span>Ecology before claims · evidence over time.</span>
           </div>
           <a className="raas-image-credit" href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">
             Plant reference photographs: Wikimedia Commons

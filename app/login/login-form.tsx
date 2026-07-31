@@ -21,12 +21,12 @@ export function LoginForm({ initialNotice }: { initialNotice?: string }) {
       <section className="portal-login-card">
         <a className="portal-login-brand" href="/">
           <Image src="/prachurja-logo-final.jpeg" alt="" width={54} height={54} unoptimized/>
-          <span><b>PRACHURJA</b><small>SECURE WORKSPACES</small></span>
+          <span><b>PRACHURJA™</b><small>SECURE WORKSPACES</small></span>
         </a>
         <div className="portal-login-icon"><Leaf/></div>
         <p className="eyebrow">Protected portal</p>
         <h1>{mode === "login" ? "Welcome back" : "Create your account"}</h1>
-        <p>{mode === "login" ? "Sign in to your assigned administration, client, partner or field workspace." : "Use an email that a Prachurja administrator has already approved."}</p>
+        <p>{mode === "login" ? "Sign in to your assigned administration, client, partner or field workspace." : "Use an email that a Prachurja™ administrator has already approved."}</p>
         {initialNotice && <p className="form-error" role="alert">{initialNotice}</p>}
         <div className="portal-login-switch">
           <button type="button" className={mode === "login" ? "active" : ""} onClick={() => setMode("login")}>Sign in</button>
@@ -42,7 +42,7 @@ export function LoginForm({ initialNotice }: { initialNotice?: string }) {
           {mode === "login" && <button className="text-button" formAction={resendAction} formNoValidate disabled={pending}>Resend verification email</button>}
         </form>
         <div className="portal-login-help">
-          <p>Access is controlled by your assigned role. Contact Prachurja if your email has not been approved.</p>
+          <p>Access is controlled by your assigned role. Contact Prachurja™ if your email has not been approved.</p>
           <a href="/contact">Get help</a>
           <a href="/">Return to website</a>
         </div>

@@ -15,9 +15,12 @@ import { SolutionsPage } from "@/components/raas/solutions-page";
 import { NurseryPage } from "@/components/raas/nursery-page";
 import { PlantDetailPage } from "@/components/raas/plant-detail-page";
 import { CartPage } from "@/components/raas/cart-page";
+import { BlogPage } from "@/components/raas/blog-page";
+import { BlogArticlePage } from "@/components/raas/blog-article-page";
 import { requireChatGPTUser } from "@/app/chatgpt-auth";
 import { canAccessPortal, getPortalRole, portalRoute } from "@/lib/portal-auth";
 import { getCatalogPlant, getCatalogPlants } from "@/lib/nursery-data";
+import { getBlogPost, getBlogPosts } from "@/lib/blog-data";
 
 export const dynamic = "force-dynamic";
 
@@ -59,12 +62,16 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
   "/nursery": {
     title: "Native Plant Nursery",
     description:
-      "Explore Prachurja native nursery plants by ecological role, water requirement and regional context.",
+      "Explore Prachurja™ native nursery plants by ecological role, water requirement and regional context.",
   },
   "/cart": {
     title: "Nursery Cart",
     description:
       "Review native plant quantities before requesting availability, provenance, delivery and final pricing.",
+  },
+  "/blog": {
+    title: "Field Journal",
+    description: "Practical notes on native species, living soil, habitat, restoration and long-term stewardship.",
   },
 };
 
@@ -83,6 +90,10 @@ export async function generateMetadata({
         description: `${plant.botanicalName}: ${plant.ecologicalRole.toLowerCase()} planting stock for locally suitable sites.`,
       };
     }
+  }
+  if (pathname.startsWith("/blog/") && slug.length === 2) {
+    const post = await getBlogPost(slug[1]);
+    if (post) return { title: post.title, description: post.excerpt };
   }
   return (
     pageMetadata[pathname] ?? {
@@ -111,6 +122,17 @@ export default async function PrototypeRoute({
 
   if (pathname === "/cart") {
     return <RaasSiteShell><CartPage /></RaasSiteShell>;
+  }
+
+  if (pathname === "/blog") {
+    const posts = await getBlogPosts();
+    return <RaasSiteShell><BlogPage posts={posts} /></RaasSiteShell>;
+  }
+
+  if (pathname.startsWith("/blog/") && slug.length === 2) {
+    const [post, posts] = await Promise.all([getBlogPost(slug[1]), getBlogPosts()]);
+    if (!post) notFound();
+    return <RaasSiteShell><BlogArticlePage post={post} related={posts.filter((item) => item.id !== post.id)} /></RaasSiteShell>;
   }
 
   if (pathname.startsWith("/plants/") && slug.length === 2) {

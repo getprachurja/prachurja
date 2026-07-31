@@ -11,7 +11,7 @@ export function SolutionsPage() {
       <PageHero
         eyebrow="What we restore"
         title="The method follows the land."
-        copy="Prachurja brings together native planting, soil and water care, invasive management and long-term stewardship. Each site receives the combination it actually needs."
+        copy="Prachurja™ brings together native planting, soil and water care, invasive management and long-term stewardship. Each site receives the combination it actually needs."
       />
       <SystemGroup
         eyebrow="Ecological recovery"

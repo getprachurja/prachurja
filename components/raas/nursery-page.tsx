@@ -35,7 +35,7 @@ export function NurseryPage({ plants }: { plants: NurseryPlant[] }) {
   return (
     <main>
       <PageHero
-        eyebrow="Prachurja native nursery"
+        eyebrow="Prachurja™ native nursery"
         title="Right plant. Right place. Right function."
         copy="Explore native planting stock by ecological role and water need. Availability, provenance and final suitability are confirmed before dispatch."
       />

@@ -8,7 +8,7 @@ export function MiyawakiPage() {
       <PageHero
         eyebrow="Miyawaki native forests"
         title="A compact forest, designed from local ecology."
-        copy="The Miyawaki method uses close planting, a diverse native species mix and prepared soil to establish a layered forest on a small site. Prachurja uses it only after checking ecological and practical suitability."
+        copy="The Miyawaki method uses close planting, a diverse native species mix and prepared soil to establish a layered forest on a small site. Prachurja™ uses it only after checking ecological and practical suitability."
       />
 
       <section className="raas-section">

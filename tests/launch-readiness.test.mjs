@@ -14,12 +14,12 @@ test("public website is focused on ecological restoration", async () => {
     read("app/layout.tsx"),
   ]);
 
-  for (const pathname of ["/approach", "/nursery", "/solutions", "/miyawaki", "/assessment", "/cart"]) {
+  for (const pathname of ["/approach", "/nursery", "/solutions", "/miyawaki", "/assessment", "/cart", "/blog"]) {
     assert.match(route, new RegExp(pathname.replace("/", "\\/")));
     assert.match(shell, new RegExp(`href="${pathname.replace("/", "\\/")}`));
   }
 
-  for (const removed of ["/marketplace", "/blog", "/economics", "/infrastructure"]) {
+  for (const removed of ["/marketplace", "/economics", "/infrastructure"]) {
     assert.doesNotMatch(shell, new RegExp(`href="${removed.replace("/", "\\/")}`));
   }
 
@@ -116,11 +116,12 @@ test("site assessment writes to the secured backend without public price bands",
 });
 
 test("native nursery, plant details and quotation cart are complete", async () => {
-  const [route, nursery, card, detail, cart, context, api, home] = await Promise.all([
+  const [route, nursery, card, detail, profiles, cart, context, api, home] = await Promise.all([
     read("app/[...slug]/page.tsx"),
     read("components/raas/nursery-page.tsx"),
     read("components/raas/nursery-plant-card.tsx"),
     read("components/raas/plant-detail-page.tsx"),
+    read("lib/plant-profiles.ts"),
     read("components/raas/cart-page.tsx"),
     read("components/raas/cart-context.tsx"),
     read("app/api/catalog/route.ts"),
@@ -132,11 +133,43 @@ test("native nursery, plant details and quotation cart are complete", async () =
   assert.match(nursery, /Water requirement/);
   assert.match(card, /Add to cart/);
   assert.match(detail, /Suitability check required/);
+  assert.match(detail, /Species characteristics/);
+  assert.match(detail, /Planting &amp; care/);
+  assert.match(profiles, /Planting season/);
   assert.match(cart, /No payment is taken here/);
   assert.match(context, /prachurja_nursery_cart_v2/);
   assert.match(context, /version: 2/);
   assert.match(api, /getCatalogPlants/);
   assert.match(home, /Browse the nursery/);
+});
+
+test("field journal is public, database backed and discoverable", async () => {
+  const [route, shell, page, article, data, home] = await Promise.all([
+    read("app/[...slug]/page.tsx"),
+    read("components/raas/site-shell.tsx"),
+    read("components/raas/blog-page.tsx"),
+    read("components/raas/blog-article-page.tsx"),
+    read("lib/blog-data.ts"),
+    read("components/raas/home-page.tsx"),
+  ]);
+  assert.match(route, /getBlogPosts/);
+  assert.match(route, /startsWith\("\/blog\/"\)/);
+  assert.match(shell, /Field journal/);
+  assert.match(page, /Notes for restoring living landscapes/);
+  assert.match(article, /Use this note well/);
+  assert.match(data, /blog_posts/);
+  assert.match(home, /From the field journal/);
+});
+
+test("Prachurja trademark treatment appears across public and portal brands", async () => {
+  const [shell, metadata, companion, login, portal] = await Promise.all([
+    read("components/raas/site-shell.tsx"),
+    read("app/layout.tsx"),
+    read("components/raas/prach-companion.tsx"),
+    read("app/login/login-form.tsx"),
+    read("components/launch-portals.tsx"),
+  ]);
+  for (const source of [shell, metadata, companion, login, portal]) assert.match(source, /Prachurja™|PRACHURJA™/i);
 });
 
 test("operational portals remain separate and role protected", async () => {

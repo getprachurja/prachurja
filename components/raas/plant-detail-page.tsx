@@ -6,6 +6,7 @@ import { ArrowLeft, Check, Minus, Plus, ShieldCheck, ShoppingBag } from "lucide-
 import { useState } from "react";
 import { useCart } from "@/components/raas/cart-context";
 import type { NurseryPlant } from "@/lib/nursery";
+import { getPlantFieldProfile } from "@/lib/plant-profiles";
 
 const money = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -17,6 +18,7 @@ export function PlantDetailPage({ plant }: { plant: NurseryPlant }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const { addPlant } = useCart();
+  const profile = getPlantFieldProfile(plant);
 
   function add() {
     addPlant(plant, quantity);
@@ -63,6 +65,31 @@ export function PlantDetailPage({ plant }: { plant: NurseryPlant }) {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      <section className="raas-section raas-field-reference">
+        <div className="raas-shell raas-field-reference-grid">
+          <div>
+            <header>
+              <p className="raas-eyebrow"><span />Field reference</p>
+              <h2>Species characteristics</h2>
+              <p>Planning guidance for an initial nursery review. Final specifications follow local provenance and site checks.</p>
+            </header>
+            <dl className="raas-spec-table">
+              {profile.fieldRows.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
+            </dl>
+          </div>
+          <aside className="raas-care-card">
+            <p className="raas-eyebrow"><span />Planting reference</p>
+            <h3>Planting &amp; care</h3>
+            <ul>{profile.care.map((item) => <li key={item}>{item}</li>)}</ul>
+            <h3>Recommended uses</h3>
+            <div className="raas-use-chips">{profile.recommendedUses.map((use) => <span key={use}>{use}</span>)}</div>
+            <h3>Companion community</h3>
+            <p>{profile.companions}</p>
+            <h3>Available batches</h3>
+            <p>Current batch, provenance and dispatch readiness are confirmed with your enquiry.</p>
+          </aside>
         </div>
       </section>
       <section className="raas-section raas-plant-care">
