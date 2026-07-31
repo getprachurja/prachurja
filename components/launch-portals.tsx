@@ -6,7 +6,8 @@ import { ArrowRight, BarChart3, Check, ClipboardCheck, FileText, PackageCheck, R
 import AdminControlCentre from "@/components/admin-control-centre";
 
 type Viewer = { name: string; email: string; role: "admin"|"client"|"partner"|"field" };
-type Assessment = { id:string; reference:string; organisation:string; state:string; district:string; area:string; unit:string; objective:string; status:string; createdAt:string; internalNote?:string };
+type NurserySnapshot = { id:string; commonName:string; botanicalName:string; unitPrice:number; quantity:number; indicativeTotal:number };
+type Assessment = { id:string; reference:string; organisation:string; state:string; district:string; area:string; unit:string; objective:string; status:string; createdAt:string; internalNote?:string; nurseryItems?:NurserySnapshot[] };
 type PartnerApplication = { id:string; reference:string; pathway:string; organisation:string; location:string; status:string; createdAt:string };
 type AccessRequest = { id:string; email:string; name:string; organisation:string; requestedRole:string; status:string; createdAt:string };
 type ContactMessage = { id:string; reference:string; name:string; organisation:string; email:string; subject:string; message:string; status:string; createdAt:string };
@@ -40,9 +41,61 @@ export function LaunchFieldPortal({viewer}:{viewer:Viewer}){
 }
 
 export function LaunchAdminDashboard({viewer}:{viewer:Viewer}){
-  const [data,setData]=useState<{counts:{assessments:number;partners:number;accessRequests:number;contacts:number};assessments:Assessment[];applications:PartnerApplication[];accessRequests:AccessRequest[];messages:ContactMessage[]}|null>(null);const [error,setError]=useState("");const [busy,setBusy]=useState("");
-  async function load(){setError("");const response=await fetch("/api/admin/summary");const payload=await response.json();if(response.ok)setData(payload);else setError(payload.error??"Unable to load operations data.")}
-  useEffect(()=>{let active=true;fetch("/api/admin/summary").then(async response=>({ok:response.ok,payload:await response.json()})).then(({ok,payload})=>{if(!active)return;if(ok)setData(payload);else setError(payload.error??"Unable to load operations data.")});return()=>{active=false}},[]);
-  async function update(body:Record<string,string>){setBusy(body.id);const response=await fetch("/api/admin/workflow",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!response.ok){const payload=await response.json();setError(payload.error??"Update failed.")}else await load();setBusy("")}
-  return <PortalShell viewer={viewer} eyebrow="Administration console" title="Restoration operations overview"><div className="dashboard-grid stats-row"><Stat value={data?.counts.assessments??"—"} label="Assessment enquiries"/><Stat value={data?.counts.partners??"—"} label="Partner applications"/><Stat value={data?.counts.contacts??"—"} label="Contact messages"/><Stat value={data?.counts.accessRequests??"—"} label="Portal access requests"/></div>{error&&<p className="form-error">{error}</p>}<section className="widget"><div className="widget-head"><div><p className="eyebrow">Pipeline</p><h2>Recent assessment enquiries</h2></div><button className="button button-secondary" onClick={load}><RefreshCw/> Refresh</button></div>{!data?<p>Loading live operations data…</p>:data.assessments.length===0?<Empty>No assessment requests have been submitted.</Empty>:<div className="table-wrap"><table><thead><tr><th>Reference</th><th>Organisation</th><th>Location</th><th>Objective</th><th>Status</th><th>Action</th></tr></thead><tbody>{data.assessments.map(row=><tr key={row.id}><td><b>{row.reference}</b></td><td>{row.organisation}</td><td>{row.district}, {row.state}</td><td>{row.objective}</td><td><State>{row.status}</State></td><td><select disabled={busy===row.id} value={row.status} onChange={event=>update({action:"assessment-status",id:row.id,status:event.target.value})}><option>New</option><option>Reviewing</option><option>Assessment scheduled</option><option>Closed</option></select></td></tr>)}</tbody></table></div>}</section><section className="widget"><p className="eyebrow">Contact inbox</p><h2>Recent general enquiries</h2>{!data?<p>Loading…</p>:data.messages.length===0?<Empty>No contact messages yet.</Empty>:<div className="table-wrap"><table><thead><tr><th>Reference</th><th>From</th><th>Subject</th><th>Message</th><th>Status</th></tr></thead><tbody>{data.messages.map(row=><tr key={row.id}><td><b>{row.reference}</b></td><td>{row.name}<br/><small>{row.email}</small></td><td>{row.subject}</td><td className="message-cell">{row.message}</td><td><select disabled={busy===row.id} value={row.status} onChange={event=>update({action:"contact-status",id:row.id,status:event.target.value})}><option>New</option><option>In progress</option><option>Resolved</option></select></td></tr>)}</tbody></table></div>}</section><div className="dashboard-grid split"><section className="widget"><p className="eyebrow">Partner intake</p><h2>Applications</h2>{!data?<p>Loading…</p>:data.applications.length===0?<Empty>No partner applications yet.</Empty>:data.applications.map(row=><div className="admin-workflow-row" key={row.id}><div><b>{row.organisation}</b><span>{row.pathway} · {row.location}</span></div><select disabled={busy===row.id} value={row.status} onChange={event=>update({action:"partner-status",id:row.id,status:event.target.value})}><option>New</option><option>Reviewing</option><option>Approved</option><option>Declined</option></select></div>)}</section><section className="widget"><p className="eyebrow">Identity and access</p><h2>Pending portal access</h2>{!data?<p>Loading…</p>:data.accessRequests.filter(row=>row.status==="Pending").length===0?<Empty>No access requests are pending.</Empty>:data.accessRequests.filter(row=>row.status==="Pending").map(row=><div className="admin-workflow-row" key={row.id}><div><b>{row.name||row.email}</b><span>{row.organisation} · requested {row.requestedRole}</span></div><button className="button button-secondary" disabled={busy===row.id} onClick={()=>update({action:"approve-access",id:row.id,role:row.requestedRole})}>Approve <Check/></button></div>)}</section></div></PortalShell>
+  const [data,setData]=useState<{counts:{assessments:number;partners:number;accessRequests:number;contacts:number};assessments:Assessment[];applications:PartnerApplication[];accessRequests:AccessRequest[];messages:ContactMessage[]}|null>(null);
+  const [error,setError]=useState("");
+  const [busy,setBusy]=useState("");
+
+  async function load(){
+    setError("");
+    const response=await fetch("/api/admin/summary");
+    const payload=await response.json();
+    if(response.ok)setData(payload);else setError(payload.error??"Unable to load operations data.");
+  }
+
+  useEffect(()=>{
+    let active=true;
+    fetch("/api/admin/summary")
+      .then(async response=>({ok:response.ok,payload:await response.json()}))
+      .then(({ok,payload})=>{if(!active)return;if(ok)setData(payload);else setError(payload.error??"Unable to load operations data.")});
+    return()=>{active=false};
+  },[]);
+
+  async function update(body:Record<string,string>){
+    setBusy(body.id);
+    const response=await fetch("/api/admin/workflow",{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(!response.ok){const payload=await response.json();setError(payload.error??"Update failed.")}else await load();
+    setBusy("");
+  }
+
+  return (
+    <PortalShell viewer={viewer} eyebrow="Administration console" title="Restoration operations overview">
+      <div className="dashboard-grid stats-row">
+        <Stat value={data?.counts.assessments??"—"} label="Assessment enquiries"/>
+        <Stat value={data?.counts.partners??"—"} label="Partner applications"/>
+        <Stat value={data?.counts.contacts??"—"} label="Contact messages"/>
+        <Stat value={data?.counts.accessRequests??"—"} label="Portal access requests"/>
+      </div>
+      {error&&<p className="form-error">{error}</p>}
+      <section className="widget">
+        <div className="widget-head"><div><p className="eyebrow">Pipeline</p><h2>Recent assessment and nursery enquiries</h2></div><button className="button button-secondary" onClick={load}><RefreshCw/> Refresh</button></div>
+        {!data?<p>Loading live operations data…</p>:data.assessments.length===0?<Empty>No assessment requests have been submitted.</Empty>:
+          <div className="table-wrap"><table><thead><tr><th>Reference</th><th>Organisation</th><th>Location</th><th>Objective</th><th>Nursery cart</th><th>Status</th><th>Action</th></tr></thead><tbody>
+            {data.assessments.map(row=>{
+              const nurseryItems=row.nurseryItems??[];
+              const plantCount=nurseryItems.reduce((sum,item)=>sum+item.quantity,0);
+              const nurseryTotal=nurseryItems.reduce((sum,item)=>sum+item.indicativeTotal,0);
+              return <tr key={row.id}><td><b>{row.reference}</b></td><td>{row.organisation}</td><td>{row.district}, {row.state}</td><td>{row.objective}</td><td>{plantCount?`${plantCount} plants · ₹${nurseryTotal.toLocaleString("en-IN")}`:"—"}</td><td><State>{row.status}</State></td><td><select disabled={busy===row.id} value={row.status} onChange={event=>update({action:"assessment-status",id:row.id,status:event.target.value})}><option>New</option><option>Reviewing</option><option>Assessment scheduled</option><option>Closed</option></select></td></tr>;
+            })}
+          </tbody></table></div>}
+      </section>
+      <section className="widget">
+        <p className="eyebrow">Contact inbox</p><h2>Recent general enquiries</h2>
+        {!data?<p>Loading…</p>:data.messages.length===0?<Empty>No contact messages yet.</Empty>:<div className="table-wrap"><table><thead><tr><th>Reference</th><th>From</th><th>Subject</th><th>Message</th><th>Status</th></tr></thead><tbody>{data.messages.map(row=><tr key={row.id}><td><b>{row.reference}</b></td><td>{row.name}<br/><small>{row.email}</small></td><td>{row.subject}</td><td className="message-cell">{row.message}</td><td><select disabled={busy===row.id} value={row.status} onChange={event=>update({action:"contact-status",id:row.id,status:event.target.value})}><option>New</option><option>In progress</option><option>Resolved</option></select></td></tr>)}</tbody></table></div>}
+      </section>
+      <div className="dashboard-grid split">
+        <section className="widget"><p className="eyebrow">Partner intake</p><h2>Applications</h2>{!data?<p>Loading…</p>:data.applications.length===0?<Empty>No partner applications yet.</Empty>:data.applications.map(row=><div className="admin-workflow-row" key={row.id}><div><b>{row.organisation}</b><span>{row.pathway} · {row.location}</span></div><select disabled={busy===row.id} value={row.status} onChange={event=>update({action:"partner-status",id:row.id,status:event.target.value})}><option>New</option><option>Reviewing</option><option>Approved</option><option>Declined</option></select></div>)}</section>
+        <section className="widget"><p className="eyebrow">Identity and access</p><h2>Pending portal access</h2>{!data?<p>Loading…</p>:data.accessRequests.filter(row=>row.status==="Pending").length===0?<Empty>No access requests are pending.</Empty>:data.accessRequests.filter(row=>row.status==="Pending").map(row=><div className="admin-workflow-row" key={row.id}><div><b>{row.name||row.email}</b><span>{row.organisation} · requested {row.requestedRole}</span></div><button className="button button-secondary" disabled={busy===row.id} onClick={()=>update({action:"approve-access",id:row.id,role:row.requestedRole})}>Approve <Check/></button></div>)}</section>
+      </div>
+    </PortalShell>
+  );
 }

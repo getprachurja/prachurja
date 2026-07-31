@@ -2,7 +2,8 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useState } from "react";
-import { Check, ExternalLink, FileImage, ShieldCheck, Trash2, UploadCloud, Users } from "lucide-react";
+import { BookOpenText, Check, ExternalLink, FileImage, ShieldCheck, Trash2, UploadCloud, Users } from "lucide-react";
+import { AdminContentManager } from "@/components/admin-content-manager";
 
 type MediaAsset = { id: string; filename: string; url: string; altText: string; size: number };
 type Member = {
@@ -13,10 +14,10 @@ type Member = {
   role: "admin" | "client" | "partner" | "field";
   status: "Active" | "Inactive";
 };
-type Tab = "media" | "users" | "portals";
+type Tab = "content" | "media" | "users" | "portals";
 
 export default function AdminControlCentre() {
-  const [tab, setTab] = useState<Tab>("media");
+  const [tab, setTab] = useState<Tab>("content");
   const [assets, setAssets] = useState<MediaAsset[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [notice, setNotice] = useState("");
@@ -109,12 +110,13 @@ export default function AdminControlCentre() {
         <div>
           <p className="eyebrow">RaaS operations control</p>
           <h2>Manage Prachurja</h2>
-          <p>Control secure workspaces and restoration evidence. The public narrative is fixed to the approved RaaS proposal.</p>
+          <p>Control the nursery catalogue, editorial content, secure workspaces and restoration evidence from one authenticated console.</p>
         </div>
         <a className="button button-secondary" href="/" target="_blank">View public website <ExternalLink /></a>
       </div>
       <nav className="admin-tabs" aria-label="Administration sections">
         {[
+          ["content", BookOpenText, "Catalog & content"],
           ["media", FileImage, "Evidence media"],
           ["users", Users, "Users & roles"],
           ["portals", ShieldCheck, "Portal previews"],
@@ -124,6 +126,8 @@ export default function AdminControlCentre() {
         })}
       </nav>
       {notice && <div className={notice.includes("failed") || notice.includes("could not") ? "admin-notice error" : "admin-notice"}><Check />{notice}</div>}
+
+      {tab === "content" && <AdminContentManager />}
 
       {tab === "media" && (
         <div className="admin-media-layout">

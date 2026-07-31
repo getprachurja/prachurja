@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowRight, Check, ClipboardCheck, ShieldCheck } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Check, ClipboardCheck, ShoppingBag, ShieldCheck } from "lucide-react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useCart } from "@/components/raas/cart-context";
 
 const schema = z.object({
   name: z.string().min(2, "Enter your name"),
@@ -63,14 +64,27 @@ export function RaasAssessmentPage() {
   const [reference, setReference] = useState("");
   const [serverError, setServerError] = useState("");
   const [sending, setSending] = useState(false);
+  const cartAttached = useRef(false);
+  const { items: cartItems, count: cartCount, total: cartTotal, hydrated, clear: clearCart } = useCart();
   const {
     register,
     handleSubmit,
     trigger,
     control,
+    setValue,
     formState: { errors },
   } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: defaults });
   const values = useWatch({ control });
+
+  useEffect(() => {
+    if (!hydrated || !cartItems.length || cartAttached.current) return;
+    const summary = cartItems.map((item) => `${item.quantity} × ${item.commonName}`).join(", ");
+    setValue(
+      "message",
+      `Nursery enquiry: ${summary}. Indicative subtotal ₹${cartTotal.toLocaleString("en-IN")}. Please confirm provenance, suitability, availability, delivery and final pricing.`,
+    );
+    cartAttached.current = true;
+  }, [cartItems, cartTotal, hydrated, setValue]);
 
   async function next() {
     const fields: Record<number, (keyof Values)[]> = {
@@ -88,13 +102,17 @@ export function RaasAssessmentPage() {
       const response = await fetch("/api/assessments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          cartItems: cartItems.map((item) => ({ id: item.id, quantity: item.quantity })),
+        }),
       });
       const payload = (await response.json()) as { reference?: string; error?: string };
       if (!response.ok || !payload.reference) {
         throw new Error(payload.error ?? "Unable to submit this site assessment.");
       }
       setReference(payload.reference);
+      clearCart();
     } catch (error) {
       setServerError(error instanceof Error ? error.message : "Unable to submit this site assessment.");
     } finally {
@@ -139,6 +157,12 @@ export function RaasAssessmentPage() {
         <div className="raas-shell raas-assessment-layout">
           <aside>
             <p>Your assessment</p>
+            {cartCount > 0 && (
+              <div className="raas-cart-attached">
+                <ShoppingBag aria-hidden="true" />
+                <p><b>{cartCount} nursery {cartCount === 1 ? "plant" : "plants"} attached</b>Your selection will be reviewed with the site.</p>
+              </div>
+            )}
             <ol>
               {steps.map((item, index) => (
                 <li
@@ -243,6 +267,7 @@ export function RaasAssessmentPage() {
                 <Review label="About you" value={`${values.organisation}\n${values.name} · ${values.email}`} onEdit={() => setStep(1)} />
                 <Review label="About the land" value={`${values.condition}\n${values.area} ${values.unit} · ${values.district}, ${values.state}`} onEdit={() => setStep(2)} />
                 <Review label="What you need" value={`${values.objective}\n${values.maintenance} · ${values.reporting}`} onEdit={() => setStep(3)} />
+                {cartCount > 0 && <Review label="Nursery enquiry" value={`${cartCount} plants · indicative subtotal ₹${cartTotal.toLocaleString("en-IN")}\nAvailability, provenance and delivery to be confirmed`} onEdit={() => window.location.assign("/cart")} />}
               </div>
             )}
 

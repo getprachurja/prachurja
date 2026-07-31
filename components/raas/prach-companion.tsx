@@ -11,13 +11,13 @@ type ChatMessage = {
 const welcome: ChatMessage = {
   role: "assistant",
   content:
-    "Hello, I’m Prach. I can explain Prachurja’s restoration approach, help you think about Miyawaki suitability, or guide you to the right next step.",
+    "Hello, I’m Prach. I can help you explore the native nursery, explain Prachurja’s restoration approach, or guide you to the right next step.",
 };
 
 const quickPrompts = [
+  "Help me explore native plants",
   "Is Miyawaki right for my site?",
   "How does a restoration project begin?",
-  "What information should I collect?",
 ];
 
 export function PrachCompanion() {

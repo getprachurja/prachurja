@@ -5,8 +5,10 @@ import {
   restorationProcess,
 } from "@/lib/raas-content";
 import { Eyebrow, SectionIntro, TextLink } from "@/components/raas/shared";
+import { NurseryPlantCard } from "@/components/raas/nursery-plant-card";
+import type { NurseryPlant } from "@/lib/nursery";
 
-export function RaasHomePage() {
+export function RaasHomePage({ featuredPlants }: { featuredPlants: NurseryPlant[] }) {
   return (
     <main>
       <section className="raas-hero">
@@ -112,6 +114,31 @@ export function RaasHomePage() {
               <p>Living cover, erosion control and careful establishment.</p>
               <span>Learn more <ArrowRight aria-hidden="true" /></span>
             </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="raas-section raas-home-nursery">
+        <div className="raas-shell">
+          <div className="raas-home-nursery-head">
+            <SectionIntro
+              eyebrow="Native nursery"
+              title="Plants chosen for a place and a purpose."
+              copy="Explore native planting stock by ecological role, water need and region. Every final selection still begins with the receiving site."
+            />
+            <a className="raas-button raas-button-secondary" href="/nursery">
+              Browse the nursery
+              <ArrowRight aria-hidden="true" />
+            </a>
+          </div>
+          <div className="raas-plant-grid raas-home-plant-grid">
+            {featuredPlants.slice(0, 3).map((plant) => (
+              <NurseryPlantCard plant={plant} key={plant.id} />
+            ))}
+          </div>
+          <div className="raas-nursery-principle">
+            <Check aria-hidden="true" />
+            <p><b>Ecology before a shopping list.</b> Species suitability, seed provenance, quantities and planting design are confirmed against the site.</p>
           </div>
         </div>
       </section>

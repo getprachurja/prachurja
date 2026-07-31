@@ -12,8 +12,12 @@ import { MethodPage } from "@/components/raas/method-page";
 import { MiyawakiPage } from "@/components/raas/miyawaki-page";
 import { RaasSiteShell } from "@/components/raas/site-shell";
 import { SolutionsPage } from "@/components/raas/solutions-page";
+import { NurseryPage } from "@/components/raas/nursery-page";
+import { PlantDetailPage } from "@/components/raas/plant-detail-page";
+import { CartPage } from "@/components/raas/cart-page";
 import { requireChatGPTUser } from "@/app/chatgpt-auth";
 import { canAccessPortal, getPortalRole, portalRoute } from "@/lib/portal-auth";
+import { getCatalogPlant, getCatalogPlants } from "@/lib/nursery-data";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +56,16 @@ const pageMetadata: Record<string, { title: string; description: string }> = {
     description:
       "Share the location, condition and intended outcome of a potential ecological restoration site.",
   },
+  "/nursery": {
+    title: "Native Plant Nursery",
+    description:
+      "Explore Prachurja native nursery plants by ecological role, water requirement and regional context.",
+  },
+  "/cart": {
+    title: "Nursery Cart",
+    description:
+      "Review native plant quantities before requesting availability, provenance, delivery and final pricing.",
+  },
 };
 
 export async function generateMetadata({
@@ -61,6 +75,15 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug = [] } = await params;
   const pathname = `/${slug.join("/")}`;
+  if (pathname.startsWith("/plants/") && slug.length === 2) {
+    const plant = await getCatalogPlant(slug[1]);
+    if (plant) {
+      return {
+        title: `${plant.commonName} · Native Nursery`,
+        description: `${plant.botanicalName}: ${plant.ecologicalRole.toLowerCase()} planting stock for locally suitable sites.`,
+      };
+    }
+  }
   return (
     pageMetadata[pathname] ?? {
       title: "Secure Workspace",
@@ -79,6 +102,21 @@ export default async function PrototypeRoute({
 
   if (pathname === "/economics" || pathname === "/infrastructure") {
     redirect("/approach");
+  }
+
+  if (pathname === "/nursery") {
+    const plants = await getCatalogPlants();
+    return <RaasSiteShell><NurseryPage plants={plants} /></RaasSiteShell>;
+  }
+
+  if (pathname === "/cart") {
+    return <RaasSiteShell><CartPage /></RaasSiteShell>;
+  }
+
+  if (pathname.startsWith("/plants/") && slug.length === 2) {
+    const plant = await getCatalogPlant(slug[1]);
+    if (!plant) notFound();
+    return <RaasSiteShell><PlantDetailPage plant={plant} /></RaasSiteShell>;
   }
 
   if (pathname === "/portal") {

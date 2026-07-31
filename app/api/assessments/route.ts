@@ -25,6 +25,10 @@ const schema = z.object({
   maintenance: z.string().trim().min(1).max(80),
   reporting: z.string().trim().min(1).max(80),
   message: z.string().trim().max(3000).optional().default(""),
+  cartItems: z.array(z.object({
+    id: z.string().trim().min(2).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+    quantity: z.number().int().min(1).max(999),
+  })).max(100).optional().default([]),
   website: z.string().max(0).optional(),
 });
 
@@ -34,7 +38,28 @@ export async function POST(request: Request) {
     if (!parsed.success) {
       return Response.json({ error: "Please review the highlighted information." }, { status: 400 });
     }
-    const data = parsed.data;
+    const { cartItems, ...data } = parsed.data;
+    const plantRows = cartItems.length
+      ? await selectRows<{ id: string; commonName: string; botanicalName: string; price: number | string }>("catalog_plants", {
+          filters: { active: true },
+          limit: 100,
+        })
+      : [];
+    const plantsById = new Map(plantRows.map((plant) => [plant.id, plant]));
+    if (cartItems.some((item) => !plantsById.has(item.id))) {
+      return Response.json({ error: "One or more nursery plants are no longer available. Please review your cart." }, { status: 400 });
+    }
+    const nurseryItems = cartItems.map((item) => {
+      const plant = plantsById.get(item.id)!;
+      return {
+        id: item.id,
+        commonName: plant.commonName,
+        botanicalName: plant.botanicalName,
+        unitPrice: Number(plant.price),
+        quantity: item.quantity,
+        indicativeTotal: Number(plant.price) * item.quantity,
+      };
+    });
     const id = crypto.randomUUID();
     const requestReference = reference("PRC-SA");
     await insertRow("assessment_requests", {
@@ -43,6 +68,7 @@ export async function POST(request: Request) {
       submitterEmail: normalizeEmail(data.email),
       ...data,
       website: undefined,
+      nurseryItems,
     });
     return Response.json({ id, reference: requestReference, status: "New" }, { status: 201 });
   } catch (error) {

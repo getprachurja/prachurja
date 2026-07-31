@@ -5,19 +5,19 @@ import "./raas.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://prachurja-six.vercel.app"),
   title: {
-    default: "Prachurja — Ecological Restoration",
+    default: "Prachurja — Ecological Restoration & Native Nursery",
     template: "%s · Prachurja",
   },
   description:
-    "Native ecological restoration, Miyawaki forests, living-soil care and long-term landscape stewardship in India.",
+    "Native plants, ecological restoration, Miyawaki forests, living-soil care and long-term landscape stewardship in India.",
   icons: {
     icon: "/prachurja-logo-final.jpeg",
     shortcut: "/prachurja-logo-final.jpeg",
   },
   openGraph: {
     type: "website",
-    title: "Prachurja — Ecological Restoration",
-    description: "Native forests and living landscapes, restored with care.",
+    title: "Prachurja — Ecological Restoration & Native Nursery",
+    description: "Native plants, living forests and landscapes restored with care.",
     images: [
       {
         url: "/prachurja-logo-final.jpeg",
@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Prachurja — Ecological Restoration",
-    description: "Native forests and living landscapes, restored with care.",
+    title: "Prachurja — Ecological Restoration & Native Nursery",
+    description: "Native plants, living forests and landscapes restored with care.",
     images: ["/prachurja-logo-final.jpeg"],
   },
 };
@@ -39,7 +39,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>{children}</body>
     </html>
   );

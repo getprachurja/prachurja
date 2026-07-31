@@ -14,12 +14,12 @@ test("public website is focused on ecological restoration", async () => {
     read("app/layout.tsx"),
   ]);
 
-  for (const pathname of ["/approach", "/solutions", "/miyawaki", "/assessment"]) {
+  for (const pathname of ["/approach", "/nursery", "/solutions", "/miyawaki", "/assessment", "/cart"]) {
     assert.match(route, new RegExp(pathname.replace("/", "\\/")));
     assert.match(shell, new RegExp(`href="${pathname.replace("/", "\\/")}`));
   }
 
-  for (const removed of ["/cart", "/nursery", "/marketplace", "/blog", "/economics", "/infrastructure"]) {
+  for (const removed of ["/marketplace", "/blog", "/economics", "/infrastructure"]) {
     assert.doesNotMatch(shell, new RegExp(`href="${removed.replace("/", "\\/")}`));
   }
 
@@ -86,7 +86,8 @@ test("Prach uses a server-only Groq route and excludes internal financial guidan
   assert.match(companion, /Is Miyawaki right for my site/);
   assert.match(endpoint, /process\.env\.GROQ_API_KEY/);
   assert.match(endpoint, /https:\/\/api\.groq\.com/);
-  assert.match(endpoint, /Do not provide prices/);
+  assert.match(endpoint, /Do not invent nursery prices/);
+  assert.match(endpoint, /Do not provide revenue projections/);
   assert.match(endpoint, /localAnswer/);
   assert.doesNotMatch(companion, /gsk_/);
   assert.doesNotMatch(endpoint, /gsk_/);
@@ -103,11 +104,39 @@ test("site assessment writes to the secured backend without public price bands",
   assert.match(form, /fetch\("\/api\/assessments"/);
   assert.match(form, /Miyawaki native forest/);
   assert.match(form, /Discuss after assessment/);
+  assert.match(form, /cartItems/);
+  assert.match(form, /raas-cart-attached/);
   assert.doesNotMatch(form, /Below ₹/);
   assert.match(endpoint, /assessment_requests/);
+  assert.match(endpoint, /catalog_plants/);
+  assert.match(endpoint, /nurseryItems/);
   assert.match(endpoint, /status: "New"/);
   assert.match(backend, /SUPABASE_APP_SECRET/);
   assert.match(migration, /enable row level security/);
+});
+
+test("native nursery, plant details and quotation cart are complete", async () => {
+  const [route, nursery, card, detail, cart, context, api, home] = await Promise.all([
+    read("app/[...slug]/page.tsx"),
+    read("components/raas/nursery-page.tsx"),
+    read("components/raas/nursery-plant-card.tsx"),
+    read("components/raas/plant-detail-page.tsx"),
+    read("components/raas/cart-page.tsx"),
+    read("components/raas/cart-context.tsx"),
+    read("app/api/catalog/route.ts"),
+    read("components/raas/home-page.tsx"),
+  ]);
+  assert.match(route, /getCatalogPlants/);
+  assert.match(route, /startsWith\("\/plants\/"\)/);
+  assert.match(nursery, /Search native plants/);
+  assert.match(nursery, /Water requirement/);
+  assert.match(card, /Add to cart/);
+  assert.match(detail, /Suitability check required/);
+  assert.match(cart, /No payment is taken here/);
+  assert.match(context, /prachurja_nursery_cart_v2/);
+  assert.match(context, /version: 2/);
+  assert.match(api, /getCatalogPlants/);
+  assert.match(home, /Browse the nursery/);
 });
 
 test("operational portals remain separate and role protected", async () => {
@@ -127,6 +156,7 @@ test("operational portals remain separate and role protected", async () => {
   assert.match(roles, /PRACHURJA_ADMIN_EMAILS/);
   assert.match(admin, /Evidence media/);
   assert.match(admin, /Users & roles/);
+  assert.match(admin, /Catalog & content/);
   for (const pathname of ["/client", "/partner-portal", "/field"]) {
     assert.match(portals, new RegExp(pathname.replace("/", "\\/")));
   }

@@ -23,18 +23,20 @@ const systemPrompt = `You are Prach, the concise and thoughtful website guide fo
 You may help with:
 - Prachurja's assessment-led restoration process
 - native species and local provenance
+- the live native nursery catalogue, plant detail pages and quotation cart
 - invasive vegetation management
 - living soil, water-sensitive restoration, erosion and fire resilience
 - Miyawaki native forests, including suitability and limitations
 - monitoring, maintenance and how to start a site assessment
 
 Important boundaries:
-- Do not provide prices, revenue projections, margins, capital expenditure, a ₹100 crore plan or investor claims. Those are not part of the public service.
+- Do not invent nursery prices or availability; direct visitors to /nursery for the current catalogue and /cart to review a selection.
+- Do not provide revenue projections, margins, capital expenditure, a ₹100 crore plan or investor claims. Those are not part of the public service.
 - Never claim that Miyawaki is right for every site. Natural grasslands, wetlands and other non-forest ecosystems must not automatically be converted to dense forest.
 - Do not prescribe a final species list or technical intervention without a site assessment and local ecological expertise.
 - Do not invent Prachurja projects, credentials, addresses, phone numbers or performance figures.
 - Do not provide emergency, medical or legal advice.
-- Keep answers warm, practical and under 140 words. When useful, point to /approach, /solutions, /miyawaki or /assessment.`;
+- Keep answers warm, practical and under 140 words. When useful, point to /nursery, /cart, /approach, /solutions, /miyawaki or /assessment.`;
 
 function clientKey(request: Request) {
   return (
@@ -62,7 +64,10 @@ function localAnswer(question: string) {
     return "Miyawaki can suit a compact urban, campus or buffer site when a local forest reference, suitable soil, water and establishment care are available. It is not a universal answer—and it should not replace grassland, wetland or other non-forest ecosystems. Start with the suitability guide at /miyawaki, then share your site at /assessment.";
   }
   if (text.includes("species") || text.includes("plant") || text.includes("tree")) {
-    return "A responsible species list starts with the local reference ecosystem, natural range, seed provenance, soil, water and the role each plant will play. Prachurja does not use one generic list for every site. See /approach for the selection principle, or use /assessment to describe your land.";
+    return "A responsible species list starts with the local reference ecosystem, natural range, seed provenance, soil, water and the role each plant will play. Browse current planting stock at /nursery, then add suitable references to /cart. Prachurja confirms the final selection against your site through /assessment.";
+  }
+  if (text.includes("cart") || text.includes("buy") || text.includes("price") || text.includes("order")) {
+    return "Browse native plants at /nursery and add the species and quantities you want to review. Your /cart shows an indicative subtotal. Continue to /assessment to request confirmed availability, provenance, delivery and final pricing; no payment is taken on the website.";
   }
   if (text.includes("start") || text.includes("begin") || text.includes("information")) {
     return "Begin with the site: location, approximate area, existing vegetation, soil condition, seasonal water, disturbance history and your intended outcome. Prachurja uses that baseline to decide what to protect, what to repair and which method may fit. You can submit those details at /assessment.";

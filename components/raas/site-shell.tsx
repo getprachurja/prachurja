@@ -2,21 +2,33 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingBag, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { PrachCompanion } from "@/components/raas/prach-companion";
+import { CartProvider, useCart } from "@/components/raas/cart-context";
 
 const navigation = [
   ["/", "Home"],
   ["/approach", "Our approach"],
+  ["/nursery", "Native nursery"],
   ["/solutions", "What we restore"],
   ["/miyawaki", "Miyawaki forests"],
 ] as const;
 
 export function RaasSiteShell({ children }: { children: React.ReactNode }) {
+  return <CartProvider><RaasSiteFrame>{children}</RaasSiteFrame></CartProvider>;
+}
+
+function RaasSiteFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { count } = useCart();
+
+  function isActive(href: string) {
+    if (href === "/nursery") return pathname === href || pathname.startsWith("/plants/");
+    return pathname === href;
+  }
 
   return (
     <div className="raas-site">
@@ -41,11 +53,15 @@ export function RaasSiteShell({ children }: { children: React.ReactNode }) {
           </Link>
           <nav className="raas-desktop-nav" aria-label="Primary navigation">
             {navigation.map(([href, label]) => (
-              <Link className={pathname === href ? "active" : ""} href={href} key={href}>
+              <Link className={isActive(href) ? "active" : ""} href={href} key={href}>
                 {label}
               </Link>
             ))}
           </nav>
+          <Link className="raas-cart-link" href="/cart" aria-label={`${count} ${count === 1 ? "item" : "items"} in cart`}>
+            <ShoppingBag aria-hidden="true" />
+            <span>{count}</span>
+          </Link>
           <Link className="raas-header-cta" href="/assessment">
             Discuss your site
           </Link>
@@ -70,6 +86,9 @@ export function RaasSiteShell({ children }: { children: React.ReactNode }) {
               {label}
             </Link>
           ))}
+          <Link href="/cart" onClick={() => setOpen(false)}>
+            Your cart <span className="raas-mobile-cart-count">{count}</span>
+          </Link>
           <Link className="raas-mobile-cta" href="/assessment" onClick={() => setOpen(false)}>
             Discuss your site
           </Link>
@@ -103,9 +122,10 @@ export function RaasSiteShell({ children }: { children: React.ReactNode }) {
             <div>
               <b>Explore</b>
               <Link href="/approach">Our approach</Link>
+              <Link href="/nursery">Native nursery</Link>
+              <Link href="/cart">Your cart</Link>
               <Link href="/solutions">Restoration work</Link>
               <Link href="/miyawaki">Miyawaki forests</Link>
-              <Link href="/assessment">Site assessment</Link>
             </div>
             <div>
               <b>Restoration topics</b>
@@ -113,6 +133,7 @@ export function RaasSiteShell({ children }: { children: React.ReactNode }) {
               <Link href="/solutions#native-plant-supply">Native plant supply</Link>
               <Link href="/approach#soil">Living soil</Link>
               <Link href="/approach#monitoring">Monitoring</Link>
+              <Link href="/assessment">Site assessment</Link>
             </div>
             <div>
               <b>Workspaces</b>
@@ -125,6 +146,9 @@ export function RaasSiteShell({ children }: { children: React.ReactNode }) {
             <span>© {new Date().getFullYear()} Prachurja</span>
             <span>Native plants · healthy soil · living landscapes</span>
           </div>
+          <a className="raas-image-credit" href="https://commons.wikimedia.org/" target="_blank" rel="noreferrer">
+            Plant reference photographs: Wikimedia Commons
+          </a>
         </div>
       </footer>
       <PrachCompanion />
