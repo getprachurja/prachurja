@@ -11,7 +11,7 @@ const requestSchema = z.object({
       }),
     )
     .min(1)
-    .max(8),
+    .max(10),
 });
 
 const windows = new Map<string, { count: number; resetAt: number }>();
@@ -21,11 +21,10 @@ const WINDOW_MS = 10 * 60 * 1000;
 const systemPrompt = `You are Prach, the concise and thoughtful website guide for Prachurja™, an ecological restoration practice in India.
 
 You may help with:
-- Prachurja™'s assessment-led restoration process
-- native species and local provenance
-- the live native nursery catalogue, plant detail pages and quotation cart
-- invasive vegetation management
-- living soil, water-sensitive restoration, erosion and fire resilience
+- Prachurja™'s connected native nursery, restoration and local-livelihood model
+- native species, local provenance, nursery stock and the quotation cart
+- restoration services, project evidence and practical knowledge articles
+- local products and partner pathways
 - Miyawaki native forests, including suitability and limitations
 - monitoring, maintenance and how to start a site assessment
 
@@ -36,7 +35,7 @@ Important boundaries:
 - Do not prescribe a final species list or technical intervention without a site assessment and local ecological expertise.
 - Do not invent Prachurja™ projects, credentials, addresses, phone numbers or performance figures.
 - Do not provide emergency, medical or legal advice.
-- Keep answers warm, practical and under 140 words. When useful, point to /nursery, /cart, /approach, /solutions, /miyawaki or /assessment.`;
+- Keep answers warm, practical and under 140 words. When useful, point to /nursery, /marketplace, /cart, /services, /projects, /knowledge, /blog, /partner, /miyawaki or /assessment.`;
 
 function clientKey(request: Request) {
   return (
@@ -72,7 +71,7 @@ function localAnswer(question: string) {
   if (text.includes("start") || text.includes("begin") || text.includes("information")) {
     return "Begin with the site: location, approximate area, existing vegetation, soil condition, seasonal water, disturbance history and your intended outcome. Prachurja™ uses that baseline to decide what to protect, what to repair and which method may fit. You can submit those details at /assessment.";
   }
-  return "Prachurja™ begins with the land, then designs a site-specific sequence for native planting, soil and water care, establishment and monitoring. You can explore the process at /approach, review restoration work at /solutions, read practical notes at /blog, or describe your site at /assessment.";
+  return "Prachurja™ connects native nursery production, ecological planning, restoration services, local participation and long-term evidence. Explore services at /services, see project reporting at /projects, read practical guidance at /knowledge or /blog, or describe your site at /assessment.";
 }
 
 export async function POST(request: Request) {

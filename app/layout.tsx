@@ -1,46 +1,25 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "./raas.css";
 
+const geist = Geist({ variable: "--font-sans", subsets: ["latin"] });
+const mono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"] });
+const display = Playfair_Display({ variable: "--font-display", subsets: ["latin"] });
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://prachurja-six.vercel.app"),
-  title: {
-    default: "Prachurja™ — Ecological Restoration & Native Nursery",
-    template: "%s · Prachurja™",
-  },
-  description:
-    "Native plants, ecological restoration, Miyawaki forests, living-soil care and long-term landscape stewardship in India.",
-  icons: {
-    icon: "/prachurja-logo-final.jpeg",
-    shortcut: "/prachurja-logo-final.jpeg",
-  },
+  metadataBase: new URL("https://aranya-works-restoration.getportale.chatgpt.site"),
+  title: { default: "Prachurja™", template: "%s · Prachurja™" },
+  description: "A connected ecological restoration platform for native nurseries, local livelihoods, field operations and measurable recovery.",
+  icons: { icon: "/prachurja-logo-final.jpeg", shortcut: "/prachurja-logo-final.jpeg" },
   openGraph: {
-    type: "website",
-    title: "Prachurja™ — Ecological Restoration & Native Nursery",
-    description: "Native plants, living forests and landscapes restored with care.",
-    images: [
-      {
-        url: "/prachurja-logo-final.jpeg",
-        width: 1254,
-        height: 1254,
-        alt: "Prachurja trademark emblem",
-      },
-    ],
+    title: "Prachurja™",
+    description: "Ecological restoration, measured over time.",
+    images: [{ url: "/og.png", width: 1672, height: 941, alt: "Prachurja™ restoration platform" }],
   },
-  twitter: {
-    card: "summary",
-    title: "Prachurja™ — Ecological Restoration & Native Nursery",
-    description: "Native plants, living forests and landscapes restored with care.",
-    images: ["/prachurja-logo-final.jpeg"],
-  },
+  twitter: { card: "summary_large_image", title: "Prachurja™", description: "Ecological restoration, measured over time.", images: ["/og.png"] },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body>{children}</body>
-    </html>
-  );
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="en"><body className={`${geist.variable} ${mono.variable} ${display.variable}`}>{children}</body></html>;
 }

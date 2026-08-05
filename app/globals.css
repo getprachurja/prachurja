@@ -71,10 +71,12 @@ p { color: var(--muted); }
 .brand small { margin-top: 4px; color: var(--earth); font: 700 .6rem/1 var(--font-sans); letter-spacing: .32em; }
 .brand-wordmark { gap: 0; }
 .brand.brand-wordmark > .prachurja-logo { display: inline-flex; line-height: normal; }
-.prachurja-logo { display: inline-flex; align-items: center; gap: 13px; flex: 0 0 auto; }
+.prachurja-logo { position: relative; display: inline-flex; align-items: center; gap: 13px; flex: 0 0 auto; }
 .prachurja-logo-mark { width: 54px; height: 54px; display: block; overflow: hidden; border-radius: 50%; background: #f8f3ea; box-shadow: 0 0 0 1px rgba(51,72,56,.11); }
 .prachurja-logo-mark img { width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.16); }
 .prachurja-logo-name { color: #f2eee3; font: 500 2rem/1 var(--font-display); letter-spacing: -.045em; }
+.prachurja-logo-trademark { align-self: flex-start; margin: 6px 0 0 -9px; color: var(--forest); font: 700 .56rem/1 var(--font-sans); letter-spacing: 0; }
+.footer-brand .prachurja-logo-trademark { margin-top: 8px; color: #f2eee3; }
 .desktop-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: clamp(14px, 1.5vw, 30px); }
 .desktop-nav a { position: relative; color: #4f5c55; font-size: .83rem; font-weight: 600; white-space: nowrap; }
 .desktop-nav a::after { content: ""; position: absolute; inset: auto 0 -11px; height: 2px; transform: scaleX(0); background: var(--earth); transition: transform .2s ease; }
