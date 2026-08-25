@@ -1,9 +1,12 @@
+import { fullPlantCatalogue, type PlantLayer } from "@/lib/plant-catalogue";
+
 export type Plant = {
   id: string;
   common: string;
   botanical: string;
   region: string;
   role: string;
+  layer: PlantLayer;
   water: "Low" | "Moderate" | "High";
   size: string;
   price: number;
@@ -11,28 +14,7 @@ export type Plant = {
   image: string;
 };
 
-export const plants: Plant[] = [
-  { id: "neem", common: "Neem", botanical: "Azadirachta indica", region: "Central & peninsular India", role: "Drought resistant", water: "Low", size: "60–90 cm", price: 145, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Neem_Tree_in_Rajasthan%2C_India.jpg/330px-Neem_Tree_in_Rajasthan%2C_India.jpg" },
-  { id: "arjun", common: "Arjun", botanical: "Terminalia arjuna", region: "Riverine plains", role: "Riverbank species", water: "High", size: "75–100 cm", price: 190, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/9/94/Fruit_I_IMG_9577.jpg" },
-  { id: "jamun", common: "Jamun", botanical: "Syzygium cumini", region: "Tropical & subtropical India", role: "Bird attracting", water: "Moderate", size: "60–90 cm", price: 175, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/b/b3/Syzygium_cumini_Bra30.png" },
-  { id: "mahua", common: "Mahua", botanical: "Madhuca longifolia", region: "Central Indian dry forests", role: "Community livelihood", water: "Low", size: "45–60 cm", price: 210, stock: "Low stock", image: "https://upload.wikimedia.org/wikipedia/commons/6/61/Mahuwa_trees_in_Chhattisgarh.jpg" },
-  { id: "amla", common: "Amla", botanical: "Phyllanthus emblica", region: "Dry deciduous zones", role: "Agroforestry species", water: "Low", size: "45–75 cm", price: 160, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/7/7f/Phyllanthus_officinalis.jpg" },
-  { id: "banyan", common: "Banyan", botanical: "Ficus benghalensis", region: "Most Indian plains", role: "Keystone canopy tree", water: "Moderate", size: "60–90 cm", price: 280, stock: "Contract grow", image: "https://upload.wikimedia.org/wikipedia/commons/9/9f/Great_banyan_tree_kol.jpg" },
-  { id: "peepal", common: "Peepal", botanical: "Ficus religiosa", region: "Plains & lower hills", role: "Wildlife supporting", water: "Moderate", size: "60–90 cm", price: 240, stock: "Low stock", image: "https://upload.wikimedia.org/wikipedia/commons/9/94/Ficus_religiosa_Bo.jpg" },
-  { id: "palash", common: "Palash", botanical: "Butea monosperma", region: "Dry deciduous India", role: "Pollinator supporting", water: "Low", size: "45–75 cm", price: 185, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/3/38/STS_001_Butea_monosperma.jpg" },
-  { id: "kadamba", common: "Kadamba", botanical: "Neolamarckia cadamba", region: "Moist tropical India", role: "Fast canopy formation", water: "High", size: "75–100 cm", price: 195, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/d/dc/Neolamarckia_cadamba_6226.jpg" },
-  { id: "karanj", common: "Karanj", botanical: "Millettia pinnata", region: "Coasts & river systems", role: "Nitrogen fixing", water: "Moderate", size: "60–90 cm", price: 155, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/1/1b/Pongamia_pinnata_%28Karanj%29_near_Hyderabad_W_IMG_7633.jpg" },
-  { id: "tendu", common: "Tendu", botanical: "Diospyros melanoxylon", region: "Central Indian forests", role: "Understorey tree", water: "Low", size: "30–45 cm", price: 170, stock: "Contract grow", image: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Bark_of_Diospyros_melanoxylon.jpg" },
-  { id: "sal", common: "Sal", botanical: "Shorea robusta", region: "Northern & central moist forests", role: "Canopy tree", water: "Moderate", size: "45–60 cm", price: 230, stock: "Contract grow", image: "https://upload.wikimedia.org/wikipedia/commons/f/fd/Shorea_robusta.jpg" },
-  { id: "khair", common: "Khair", botanical: "Senegalia catechu", region: "Dry forests & foothills", role: "Soil stabilising", water: "Low", size: "45–60 cm", price: 150, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Acacia_catechu_-_K%C3%B6hler%E2%80%93s_Medizinal-Pflanzen-003.jpg" },
-  { id: "shisham", common: "Shisham", botanical: "Dalbergia sissoo", region: "Indo-Gangetic riverine belt", role: "Pioneer species", water: "Moderate", size: "60–90 cm", price: 180, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/e/e9/Dalbergia_sissoo_Bra24.png" },
-  { id: "baheda", common: "Baheda", botanical: "Terminalia bellirica", region: "Moist deciduous India", role: "Bird attracting", water: "Moderate", size: "60–90 cm", price: 205, stock: "Low stock", image: "https://upload.wikimedia.org/wikipedia/commons/7/74/Terminalia_bellirica.jpg" },
-  { id: "harad", common: "Harad", botanical: "Terminalia chebula", region: "Sub-Himalayan & deciduous belts", role: "Canopy tree", water: "Moderate", size: "45–75 cm", price: 215, stock: "Contract grow", image: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Harra_%28Terminalia_chebula%29_leafless_tree_at_23_Mile%2C_Duars%2C_WB_W_IMG_5905.jpg" },
-  { id: "kusum", common: "Kusum", botanical: "Schleichera oleosa", region: "Central & eastern India", role: "Wildlife supporting", water: "Low", size: "45–60 cm", price: 225, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/1/1e/Schleic_oleos_080320-5971_rgn.JPG" },
-  { id: "bamboo", common: "Male Bamboo", botanical: "Dendrocalamus strictus", region: "Dry deciduous India", role: "Soil stabilising", water: "Low", size: "60–90 cm", price: 135, stock: "Available", image: "https://upload.wikimedia.org/wikipedia/commons/5/52/Bamboo_leaves1.JPG" },
-  { id: "putranjiva", common: "Putranjiva", botanical: "Putranjiva roxburghii", region: "Moist deciduous plains", role: "Bird attracting", water: "Moderate", size: "45–75 cm", price: 200, stock: "Low stock", image: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Putranjiva_roxburghii_01.JPG?width=1000" },
-  { id: "kanak-champa", common: "Kanak Champa", botanical: "Pterospermum acerifolium", region: "Eastern & northeastern India", role: "Pollinator supporting", water: "Moderate", size: "60–90 cm", price: 260, stock: "Contract grow", image: "https://upload.wikimedia.org/wikipedia/commons/8/8f/Kanak_Champa_%28Pterospermum_acerifolium%29_in_Hyderabad_W_IMG_7126.jpg" },
-];
+export const plants: Plant[] = fullPlantCatalogue;
 
 export const products = [
   ["biochar", "Community Biochar", "Soil Products", "Satpura Soil Collective", "Mandla, MP", 620, "Invasive-to-Asset"],

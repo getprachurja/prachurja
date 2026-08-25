@@ -1,8 +1,10 @@
+import type { PlantLayer } from "@/lib/plant-catalogue";
+
 export type CartItem = {
   id: string;
   name: string;
   subtitle: string;
-  category: "Native plant" | "Local product";
+  category: "Native plant" | PlantLayer | "Local product";
   unitPrice: number;
   quantity: number;
   image?: string;

@@ -71,7 +71,7 @@ test("nursery shopping, detailed plant references and the quotation cart remain 
     read("app/api/catalog/route.ts"),
   ]);
 
-  assert.match(platform, /Search common name, botanical name or ecological role/);
+  assert.match(platform, /Search common name, botanical name or layer/);
   assert.match(platform, /Species characteristics/);
   assert.match(platform, /Planting & care/);
   assert.match(platform, /Add to cart/);
