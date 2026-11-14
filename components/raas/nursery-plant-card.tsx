@@ -7,12 +7,6 @@ import { useState } from "react";
 import { useCart } from "@/components/raas/cart-context";
 import type { NurseryPlant } from "@/lib/nursery";
 
-const money = new Intl.NumberFormat("en-IN", {
-  style: "currency",
-  currency: "INR",
-  maximumFractionDigits: 0,
-});
-
 export function NurseryPlantCard({ plant }: { plant: NurseryPlant }) {
   const { addPlant } = useCart();
   const [added, setAdded] = useState(false);
@@ -37,10 +31,6 @@ export function NurseryPlantCard({ plant }: { plant: NurseryPlant }) {
           <div><dt>Water</dt><dd>{plant.waterRequirement}</dd></div>
           <div><dt>Plant size</dt><dd>{plant.plantSize}</dd></div>
         </dl>
-        <div className="raas-plant-price">
-          <strong>{money.format(plant.price)}</strong>
-          <span>Indicative per plant</span>
-        </div>
         <div className="raas-plant-actions">
           <button type="button" onClick={add} aria-label={`Add ${plant.commonName} to cart`}>
             {added ? <Check aria-hidden="true" /> : <Plus aria-hidden="true" />}

@@ -8,12 +8,6 @@ import { useCart } from "@/components/raas/cart-context";
 import type { NurseryPlant } from "@/lib/nursery";
 import { getPlantFieldProfile } from "@/lib/plant-profiles";
 
-const money = new Intl.NumberFormat("en-IN", {
-  style: "currency",
-  currency: "INR",
-  maximumFractionDigits: 0,
-});
-
 export function PlantDetailPage({ plant }: { plant: NurseryPlant }) {
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
@@ -47,7 +41,6 @@ export function PlantDetailPage({ plant }: { plant: NurseryPlant }) {
                 <div><dt>Current plant size</dt><dd>{plant.plantSize}</dd></div>
                 <div><dt>Ecological role</dt><dd>{plant.ecologicalRole}</dd></div>
               </dl>
-              <div className="raas-detail-price"><strong>{money.format(plant.price)}</strong><span>Indicative per plant · taxes and delivery confirmed on review</span></div>
               <div className="raas-detail-buy">
                 <div aria-label={`Quantity for ${plant.commonName}`}>
                   <button type="button" aria-label="Decrease quantity" onClick={() => setQuantity((current) => Math.max(1, current - 1))}><Minus aria-hidden="true" /></button>

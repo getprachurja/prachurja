@@ -6,14 +6,8 @@ import { ArrowRight, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useCart } from "@/components/raas/cart-context";
 import { PageHero } from "@/components/raas/shared";
 
-const money = new Intl.NumberFormat("en-IN", {
-  style: "currency",
-  currency: "INR",
-  maximumFractionDigits: 0,
-});
-
 export function CartPage() {
-  const { items, count, total, hydrated, setQuantity, removeItem, clear } = useCart();
+  const { items, count, hydrated, setQuantity, removeItem, clear } = useCart();
 
   if (!hydrated) {
     return <main><PageHero eyebrow="Your nursery cart" title="Loading your plant list." copy="Your saved nursery selections are being prepared." /></main>;
@@ -49,7 +43,7 @@ export function CartPage() {
                   <span>Native plant</span>
                   <h2><Link href={`/plants/${item.id}`}>{item.commonName}</Link></h2>
                   <i>{item.botanicalName}</i>
-                  <small>{money.format(item.unitPrice)} indicative each</small>
+                  <small>Price confirmed on quotation</small>
                 </div>
                 <div className="raas-cart-item-actions">
                   <div aria-label={`Quantity for ${item.commonName}`}>
@@ -57,7 +51,6 @@ export function CartPage() {
                     <output>{item.quantity}</output>
                     <button type="button" aria-label={`Increase ${item.commonName} quantity`} onClick={() => setQuantity(item.id, item.quantity + 1)}><Plus aria-hidden="true" /></button>
                   </div>
-                  <strong>{money.format(item.unitPrice * item.quantity)}</strong>
                   <button type="button" onClick={() => removeItem(item.id)}><Trash2 aria-hidden="true" /> Remove</button>
                 </div>
               </article>
@@ -65,8 +58,8 @@ export function CartPage() {
           </div>
           <aside className="raas-cart-summary">
             <p className="raas-eyebrow"><span />Enquiry summary</p>
-            <div><span>Indicative subtotal</span><strong>{money.format(total)}</strong></div>
-            <p>Final availability, minimum quantities, provenance, taxes and delivery are confirmed after review.</p>
+            <div><span>Plant pricing</span><strong>Quote on enquiry</strong></div>
+            <p>Final availability, pricing, minimum quantities, provenance, taxes and delivery are confirmed after review.</p>
             <Link className="raas-button raas-button-primary" href="/assessment">Continue to site details <ArrowRight aria-hidden="true" /></Link>
             <Link href="/nursery">Continue browsing</Link>
             <small><b>No payment is taken here.</b> This creates a nursery quotation request, not a confirmed order.</small>

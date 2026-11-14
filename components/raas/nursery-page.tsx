@@ -20,7 +20,6 @@ export function NurseryPage({ plants }: { plants: NurseryPlant[] }) {
       const matchesQuery = !deferredQuery || `${plant.commonName} ${plant.botanicalName} ${plant.ecologicalRole} ${plant.region}`.toLowerCase().includes(deferredQuery);
       return matchesQuery && (water === "All" || plant.waterRequirement === water);
     });
-    if (sort === "price") return result.toSorted((a, b) => a.price - b.price);
     if (sort === "name") return result.toSorted((a, b) => a.commonName.localeCompare(b.commonName));
     if (sort === "availability") return result.toSorted((a, b) => a.stockStatus.localeCompare(b.stockStatus));
     return result;
@@ -56,7 +55,6 @@ export function NurseryPage({ plants }: { plants: NurseryPlant[] }) {
               <span>Sort plants</span>
               <select value={sort} onChange={(event) => setSort(event.target.value)}>
                 <option value="ecological">Ecological relevance</option>
-                <option value="price">Price: low to high</option>
                 <option value="name">Name: A to Z</option>
                 <option value="availability">Availability</option>
               </select>
