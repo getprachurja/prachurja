@@ -66,7 +66,7 @@ function localAnswer(question: string) {
     return "A responsible species list starts with the local reference ecosystem, natural range, seed provenance, soil, water and the role each plant will play. Browse current planting stock at /nursery, then add suitable references to /cart. Prachurja™ confirms the final selection against your site through /assessment.";
   }
   if (text.includes("cart") || text.includes("buy") || text.includes("price") || text.includes("order")) {
-    return "Browse native plants at /nursery and add the species and quantities you want to review. Your /cart shows an indicative subtotal. Continue to /assessment to request confirmed availability, provenance, delivery and final pricing; no payment is taken on the website.";
+    return "Browse native plants at /nursery and add the species and quantities you want to review. Your /cart keeps the requested selection together. Continue to /assessment to request confirmed availability, provenance, delivery and final pricing; no payment is taken on the website.";
   }
   if (text.includes("start") || text.includes("begin") || text.includes("information")) {
     return "Begin with the site: location, approximate area, existing vegetation, soil condition, seasonal water, disturbance history and your intended outcome. Prachurja™ uses that baseline to decide what to protect, what to repair and which method may fit. You can submit those details at /assessment.";
