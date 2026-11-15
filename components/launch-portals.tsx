@@ -14,9 +14,7 @@ type NurserySnapshot = {
   id: string;
   commonName: string;
   botanicalName: string;
-  unitPrice: number;
   quantity: number;
-  indicativeTotal: number;
 };
 type Assessment = {
   id: string;
@@ -589,7 +587,6 @@ export function LaunchAdminDashboard({ viewer }: { viewer: Viewer }) {
                 {data.assessments.map((row) => {
                   const nurseryItems = row.nurseryItems ?? [];
                   const plantCount = nurseryItems.reduce((sum, item) => sum + item.quantity, 0);
-                  const nurseryTotal = nurseryItems.reduce((sum, item) => sum + item.indicativeTotal, 0);
                   return (
                     <tr key={row.id}>
                       <td>
@@ -600,7 +597,7 @@ export function LaunchAdminDashboard({ viewer }: { viewer: Viewer }) {
                         {row.district}, {row.state}
                       </td>
                       <td>{row.objective}</td>
-                      <td>{plantCount ? `${plantCount} plants · ₹${nurseryTotal.toLocaleString("en-IN")}` : "—"}</td>
+                      <td>{plantCount ? `${plantCount} plants · quotation requested` : "—"}</td>
                       <td>
                         <State>{row.status}</State>
                       </td>

@@ -15,6 +15,7 @@ const schema = z.object({
   objective: z.string().min(1), timeline: z.string(), budget: z.string(), maintenance: z.string(), reporting: z.string(), message: z.string().optional(), website: z.string().optional(),
 });
 type Values = z.infer<typeof schema>;
+type RequestedPlant = { id: string; quantity: number };
 
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return <label className="form-field"><span>{label}</span>{children}{error && <small className="error">{error}</small>}</label>;
@@ -28,16 +29,25 @@ export default function AssessmentFormPage() {
   const [serverError, setServerError] = useState("");
   const [sending, setSending] = useState(false);
   const [cartAttached, setCartAttached] = useState(0);
+  const [requestedPlants, setRequestedPlants] = useState<RequestedPlant[]>([]);
   const { register, handleSubmit, trigger, watch, setValue, formState: { errors } } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: defaults });
   const values = watch();
   const steps = ["Contact", "Site", "Objective", "Requirements", "Review"];
 
   useEffect(() => {
     const items = readCart();
-    if (!items.length) return;
+    if (!items.length) {
+      setCartAttached(0);
+      setRequestedPlants([]);
+      return;
+    }
     const summary = items.map(item => `${item.quantity} × ${item.name} (${item.category})`).join(", ");
+    const plants = items.flatMap((item) => item.id.startsWith("plant-")
+      ? [{ id: item.id.slice("plant-".length), quantity: item.quantity }]
+      : []);
     setValue("message", `Cart enquiry: ${summary}. Please confirm availability, suitability, delivery and final pricing.`);
     setCartAttached(items.reduce((count,item)=>count+item.quantity,0));
+    setRequestedPlants(plants);
   }, [setValue]);
 
   async function next() {
@@ -48,12 +58,18 @@ export default function AssessmentFormPage() {
   async function submit(data: Values) {
     setSending(true); setServerError("");
     try {
-      const response = await fetch("/api/assessments", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) });
+      const response = await fetch("/api/assessments", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ ...data, cartItems: requestedPlants }),
+      });
       const payload = await response.json() as { reference?: string; error?: string };
       if (!response.ok || !payload.reference) throw new Error(payload.error ?? "Unable to submit your assessment.");
       setReference(payload.reference);
       window.localStorage.removeItem(CART_STORAGE_KEY);
       window.dispatchEvent(new CustomEvent("prachurja:cart-updated"));
+      setRequestedPlants([]);
+      setCartAttached(0);
     } catch (error) {
       setServerError(error instanceof Error ? error.message : "Unable to submit your assessment.");
     } finally { setSending(false); }

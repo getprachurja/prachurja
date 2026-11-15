@@ -27,3 +27,17 @@ test('access gate signs out through the implemented POST endpoint', async () => 
 test('health endpoint does not claim an untested storage check', async () => {
   assert.match(await read('app/api/health/route.ts'), /storage: "not_checked"/);
 });
+
+test('assessment checkout submits structured plant quantities without exposing a total', async () => {
+  const source = await read('components/assessment-form.tsx');
+  assert.match(source, /cartItems: requestedPlants/);
+  assert.match(source, /item\.id\.startsWith\("plant-"\)/);
+  assert.doesNotMatch(source, /cartTotal/);
+});
+
+test('admin assessment list requests a quotation instead of displaying plant pricing', async () => {
+  const source = await read('components/launch-portals.tsx');
+  assert.match(source, /quotation requested/);
+  assert.doesNotMatch(source, /nurseryTotal/);
+  assert.doesNotMatch(source, /indicativeTotal/);
+});
