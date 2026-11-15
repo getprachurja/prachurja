@@ -12,6 +12,11 @@ export default async function PrototypeRoute({ params }: { params: Promise<{ slu
   const { slug = [] } = await params;
   const pathname = `/${slug.join("/")}`;
 
+  if ((protectedPortals.has(pathname) || pathname === "/portal") &&
+      (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY)) {
+    return <main className="portal-gate"><section className="portal-gate-card"><p className="eyebrow">Secure workspace</p><h1>Workspace setup required</h1><p>Authentication and the database must be connected before this portal can be used. No administrative access has been granted.</p><a className="button button-primary" href="/">Return to website</a></section></main>;
+  }
+
   if (pathname === "/portal") {
     const user = await requireChatGPTUser("/portal");
     const role = await getPortalRole(user.email);

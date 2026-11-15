@@ -5,9 +5,8 @@ export function reference(prefix: string): string {
 }
 
 export function errorResponse(error: unknown, fallback = "Unable to complete the request") {
-  const message = error instanceof Error ? error.message : fallback;
   console.error(error);
-  return Response.json({ error: message || fallback }, { status: 500 });
+  return Response.json({ error: fallback }, { status: 500 });
 }
 
 export function normalizeEmail(email: string): string {

@@ -35,6 +35,8 @@ async function confirmationRedirect() {
 }
 
 export async function login(_state: LoginState, formData: FormData): Promise<LoginState> {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY)
+    return { error: "Workspace sign-in is unavailable until authentication is configured." };
   const parsed = credentials(formData);
   if (!parsed.success)
     return {
@@ -56,6 +58,8 @@ export async function login(_state: LoginState, formData: FormData): Promise<Log
 }
 
 export async function signup(_state: LoginState, formData: FormData): Promise<LoginState> {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY)
+    return { error: "Account creation is unavailable until authentication is configured." };
   const parsed = credentials(formData);
   if (!parsed.success)
     return {
@@ -87,6 +91,8 @@ export async function signup(_state: LoginState, formData: FormData): Promise<Lo
 }
 
 export async function resendConfirmation(_state: LoginState, formData: FormData): Promise<LoginState> {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY)
+    return { error: "Email verification is unavailable until authentication is configured." };
   const parsed = z.string().trim().email().max(180).safeParse(formData.get("email"));
   if (!parsed.success) return { error: "Enter the email address used to create your account." };
   const email = parsed.data.toLowerCase();

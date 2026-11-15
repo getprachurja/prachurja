@@ -12,19 +12,25 @@ const SIGN_OUT_PATH = "/auth/signout";
 const CALLBACK_PATH = "/auth/confirm";
 
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
-  const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.auth.getUser();
-  const email = data.user?.email?.trim().toLowerCase();
-  if (error || !email) return null;
-  const fullName = typeof data.user.user_metadata?.full_name === "string"
-    ? data.user.user_metadata.full_name.trim() || null
-    : null;
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase.auth.getUser();
+    const email = data.user?.email?.trim().toLowerCase();
+    if (error || !email) return null;
+    const fullName = typeof data.user.user_metadata?.full_name === "string"
+      ? data.user.user_metadata.full_name.trim() || null
+      : null;
 
-  return {
-    displayName: fullName ?? email,
-    email,
-    fullName,
-  };
+    return {
+      displayName: fullName ?? email,
+      email,
+      fullName,
+    };
+  } catch {
+    // The local preview intentionally runs before a Supabase project is linked.
+    // Treat an absent auth configuration as a signed-out visitor, not a server crash.
+    return null;
+  }
 }
 
 export async function requireChatGPTUser(

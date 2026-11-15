@@ -51,9 +51,7 @@ export default function PortalAccessGate({ user, assignedRole }: { user: { name:
           <a className="button button-primary" href={destination[assignedRole]}>
             Open my workspace <ArrowRight />
           </a>
-          <a className="portal-signout" href="/signout-with-chatgpt?return_to=/">
-            Sign out
-          </a>
+          <form action="/auth/signout" method="post"><button className="portal-signout" type="submit">Sign out</button></form>
         </section>
       </main>
     );
@@ -111,7 +109,7 @@ export default function PortalAccessGate({ user, assignedRole }: { user: { name:
         )}
         <div className="portal-gate-links">
           <a href="/">Return to website</a>
-          <a href="/signout-with-chatgpt?return_to=/">Sign out</a>
+          <form action="/auth/signout" method="post"><button type="submit">Sign out</button></form>
         </div>
       </section>
     </main>
