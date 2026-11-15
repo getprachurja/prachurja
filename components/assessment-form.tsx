@@ -5,7 +5,7 @@ import { ArrowRight, Check, ClipboardCheck, FileText } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CART_STORAGE_KEY, cartTotal, readCart } from "@/lib/cart";
+import { CART_STORAGE_KEY, readCart } from "@/lib/cart";
 
 const schema = z.object({
   name: z.string().min(2, "Enter your name"), organisation: z.string().min(2, "Enter an organisation"),
@@ -36,7 +36,7 @@ export default function AssessmentFormPage() {
     const items = readCart();
     if (!items.length) return;
     const summary = items.map(item => `${item.quantity} × ${item.name} (${item.category})`).join(", ");
-    setValue("message", `Cart enquiry: ${summary}. Indicative subtotal ₹${cartTotal(items).toLocaleString("en-IN")}. Please confirm availability, suitability, delivery and final pricing.`);
+    setValue("message", `Cart enquiry: ${summary}. Please confirm availability, suitability, delivery and final pricing.`);
     setCartAttached(items.reduce((count,item)=>count+item.quantity,0));
   }, [setValue]);
 
