@@ -85,8 +85,33 @@ export async function signup(_state: LoginState, formData: FormData): Promise<Lo
   });
   if (error) return { error: error.message };
   if (data.session) redirect(portalRoute(role));
+  if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0)
+    return {
+      message: "An account may already exist for this email. Sign in with your existing password or use Forgot password.",
+    };
   return {
     message: "Account created. Check your email to confirm it, then return here to sign in.",
+  };
+}
+
+export async function requestPasswordReset(_state: LoginState, formData: FormData): Promise<LoginState> {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_PUBLISHABLE_KEY)
+    return { error: "Password recovery is unavailable until authentication is configured." };
+  const parsed = z.string().trim().email().max(180).safeParse(formData.get("email"));
+  if (!parsed.success) return { error: "Enter the email address used for your account." };
+
+  const supabase = await createSupabaseServerClient();
+  const origin = await confirmationRedirect();
+  const redirectTo = new URL("/auth/confirm?next=/reset-password", origin).toString();
+  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.toLowerCase(), { redirectTo });
+  if (error)
+    return {
+      error: error.message.toLowerCase().includes("rate limit")
+        ? "Too many recovery requests. Wait a few minutes, then try again."
+        : "We could not start password recovery. Please try again shortly.",
+    };
+  return {
+    message: "If an account exists for this email, a password-reset link has been sent. Check your inbox and spam folder.",
   };
 }
 
