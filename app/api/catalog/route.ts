@@ -12,7 +12,7 @@ export async function GET() {
 
     return Response.json({
       plants: plantRows.map((row) => ({ id: row.id, common: row.commonName, botanical: row.botanicalName, region: row.region, role: row.ecologicalRole, layer: row.layer ?? null, water: row.waterRequirement, size: row.plantSize, price: Number(row.price), stock: row.stockStatus, image: row.imageUrl, description: row.description })),
-      products: productRows.map((row) => [row.id, row.name, row.category, row.producer, row.location, Number(row.price), row.badge]),
+      products: productRows.map((row) => [row.id, row.name, row.category, row.producer, row.location, Number(row.price), row.badge, row.imageUrl, row.description]),
       projects: projectRows.map((row) => ({ id: row.id, title: row.title, location: row.location, area: row.area, type: row.projectType, status: row.status, species: Number(row.speciesCount), period: row.period, progress: Number(row.progress), summary: row.summary, image: row.imageUrl })),
       articles: blogRows.map((row) => [row.category, row.title, row.readTime, row.category, row.id, row.excerpt, row.body, row.coverImageUrl]),
     }, { headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } });
