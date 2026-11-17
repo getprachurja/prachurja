@@ -7,6 +7,7 @@ type Resource = "plants" | "products" | "blogs" | "projects";
 type Item = Record<string, string | number | boolean | null>;
 type Field = { key: string; label: string; type?: "text" | "number" | "textarea" | "checkbox" | "select" | "url"; options?: string[]; required?: boolean; hint?: string };
 type Config = { label: string; singular: string; icon: typeof Trees; titleKey: string; subtitleKey: string; fields: Field[]; empty: Item };
+const PAGE_SIZE = 8;
 
 const configs: Record<Resource, Config> = {
   plants: { label: "Plants & trees", singular: "plant", icon: Trees, titleKey: "commonName", subtitleKey: "botanicalName", empty: { id: "", commonName: "", botanicalName: "", layer: "Tree Layer", region: "", ecologicalRole: "", waterRequirement: "Moderate", plantSize: "60–90 cm", price: 0, stockStatus: "Available", imageUrl: "", description: "", featured: false, active: true, sortOrder: 0 }, fields: [
@@ -33,6 +34,7 @@ export function AdminContentManager() {
   const [form, setForm] = useState<Item>(configs.plants.empty);
   const [editing, setEditing] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [busy, setBusy] = useState(true);
   const [notice, setNotice] = useState("");
   const config = configs[resource];
@@ -71,6 +73,7 @@ export function AdminContentManager() {
     const needle = query.trim().toLowerCase();
     return needle ? items.filter((item) => Object.values(item).some((value) => String(value ?? "").toLowerCase().includes(needle))) : items;
   }, [items, query]);
+  const shownItems = visible.slice(0, visibleCount);
 
   function choose(next: Resource) {
     setBusy(true);
@@ -78,7 +81,13 @@ export function AdminContentManager() {
     setForm(configs[next].empty);
     setEditing(null);
     setQuery("");
+    setVisibleCount(PAGE_SIZE);
     setNotice("");
+  }
+
+  function search(value: string) {
+    setQuery(value);
+    setVisibleCount(PAGE_SIZE);
   }
 
   function change(field: Field, value: string | boolean) {
@@ -170,10 +179,11 @@ export function AdminContentManager() {
           <button className="button button-earth" disabled={busy}>{busy ? <LoaderCircle className="spin" /> : editing ? <Save /> : <Plus />}{editing ? "Save changes" : `Add ${config.singular}`}</button>
         </form>
         <div className="admin-content-list">
-          <div className="admin-content-toolbar"><div><p className="eyebrow">Content library</p><h3>{config.label}</h3></div><label className="search-box small"><Search /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Search ${config.label.toLowerCase()}`} /></label></div>
-          {busy && items.length === 0 ? <p>Loading…</p> : visible.length === 0 ? <div className="portal-empty"><EmptyIcon /><p>No matching content yet.</p></div> : visible.map((item) => (
+          <div className="admin-content-toolbar"><div><p className="eyebrow">Content library</p><h3>{config.label}</h3></div><label className="search-box small"><Search /><input value={query} onChange={(event) => search(event.target.value)} placeholder={`Search ${config.label.toLowerCase()}`} /></label></div>
+          {busy && items.length === 0 ? <p>Loading…</p> : visible.length === 0 ? <div className="portal-empty"><EmptyIcon /><p>No matching content yet.</p></div> : shownItems.map((item) => (
             <article key={String(item.id)}><div><b>{String(item[config.titleKey])}</b><span>{String(item[config.subtitleKey] ?? item.id)}</span><small>{String(item.id)}</small></div><div className="admin-content-row-actions"><button type="button" onClick={() => edit(item)}><Pencil /> Edit</button><button type="button" className="danger" onClick={() => void remove(item)}><Trash2 /> Delete</button></div></article>
           ))}
+          {visible.length > 0 && <div className="admin-load-more"><small>Showing {Math.min(visibleCount, visible.length)} of {visible.length}</small>{visibleCount < visible.length && <button type="button" className="button button-secondary" onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}>Load more</button>}</div>}
         </div>
       </div>
     </section>
