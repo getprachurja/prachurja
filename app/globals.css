@@ -316,7 +316,7 @@ dd { margin: 0; text-align: right; font-size: .74rem; font-weight: 600; }
 .privacy-note { display: flex; gap: 12px; padding: 16px; background: var(--sand); }
 .privacy-note svg { flex: 0 0 auto; width: 19px; color: var(--earth); }
 .privacy-note p { margin: 0; font-size: .7rem; }
-.assessment-layout form { min-height: 650px; padding: 38px; background: white; box-shadow: var(--shadow); }
+.assessment-layout form { min-height: 0; padding: 38px; background: white; box-shadow: var(--shadow); }
 .form-head { display: grid; margin-bottom: 35px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
 .form-head span { color: var(--earth); font: 700 .67rem var(--font-mono); text-transform: uppercase; }
 .form-head b { font: 500 2rem var(--font-display); }
